@@ -1,4 +1,4 @@
-package Coffee.domain;
+package App.domain;
 
 public class Person {
     protected Integer id;
