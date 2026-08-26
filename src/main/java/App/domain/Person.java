@@ -1,4 +1,4 @@
-package App.domain;
+package app.domain;
 
 public class Person {
     protected Integer id;
@@ -8,6 +8,7 @@ public class Person {
     protected String phone;
     protected String password;
     protected boolean state;
+    private String rol;
 
     // constructor vacio
 
@@ -21,6 +22,7 @@ public class Person {
         this.phone = phone;
         this.password = password;
         this.state = state;
+        this.rol= rol;
     }
 
 
@@ -45,6 +47,14 @@ public class Person {
     public boolean isState() { return state; }
     public void setState(boolean state) { this.state = state; }
 
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
+
     // agrego metodos;
 
     public void create(){}
@@ -54,4 +64,5 @@ public class Person {
     public void deleteById(){}
     public boolean selectState(){return this.state;
     }
+    public void selectByRol(){}
 }
