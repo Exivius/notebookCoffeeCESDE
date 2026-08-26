@@ -11,18 +11,7 @@ public class Person {
 
     // constructor vacio
 
-    public Person(){
-
-    }
-
-    public Person(String email, String password){
-        this.email = email;
-        this.password = password;
-    }
-
-    public Person(boolean state) { this.state = state; }
-
-    public Person(int id) { this.id = id; }
+    public Person(){}
 
     public Person(Integer id , String name, String lastName , String email , String password, boolean state){
         this.id = id;
@@ -62,7 +51,7 @@ public class Person {
     public void selectAll(){}
     public void selectById(){}
     public void update(){}
-    public void delete(){}
-    public void delete(int id){}
-
+    public void deleteById(){}
+    public boolean selectState(){return this.state;
+    }
 }

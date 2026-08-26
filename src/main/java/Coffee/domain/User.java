@@ -22,11 +22,24 @@ public class User extends Person{
     @Override
     public void create(){ super.create(); }
 
-
     @Override
     public void update(){ super.update(); }
 
-    public void adduserType(String userType){
-
+    @Override
+    public void selectById(){
+        super.selectById();
     }
+
+    @Override
+    public void selectAll(){
+        super.selectAll();
+    }
+
+    @Override
+    public void deleteById(){
+        super.deleteById();
+    }
+
+
+
 }
