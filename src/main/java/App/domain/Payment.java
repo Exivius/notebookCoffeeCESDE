@@ -1,4 +1,4 @@
-package App.domain;
+package app.domain;
 
 public class Payment {
     private Integer paymentId;
