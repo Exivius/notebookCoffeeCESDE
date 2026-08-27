@@ -1,4 +1,4 @@
-package app.domain;
+package App.domain;
 
 public class paymentMethod {
 

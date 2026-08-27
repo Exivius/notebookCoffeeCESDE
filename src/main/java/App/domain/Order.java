@@ -1,15 +1,15 @@
-package app.domain;
+package App.domain;
 
 public class Order {
     private Integer orderId;
-    private String place;
-    private String user;
-    private String products;
+    private Place place;
+    private User user;
+    private Products products;
 
     // constructor vacio
     public Order() {}
 
-    public Order(Integer orderId, String place, String user, String products) {
+    public Order(Integer orderId, Place place, User user, Products products) {
         this.orderId = orderId;
         this.place = place;
         this.user = user;
@@ -24,27 +24,27 @@ public class Order {
         this.orderId = orderId;
     }
 
-    public String getPlace() {
+    public Place getPlace() {
         return place;
     }
 
-    public void setPlace(String place) {
+    public void setPlace(Place place) {
         this.place = place;
     }
 
-    public String getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(String user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
-    public String getProducts() {
+    public Products getProducts() {
         return products;
     }
 
-    public void setProducts(String products) {
+    public void setProducts(Products products) {
         this.products = products;
     }
 
