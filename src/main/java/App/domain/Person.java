@@ -7,14 +7,16 @@ public class Person {
     protected String email;
     protected String phone;
     protected String password;
-    protected boolean state;
+    protected String state;
     private String rol;
 
     // constructor vacio
 
     public Person(){}
 
-    public Person(Integer id , String name, String lastName , String email , String password, boolean state){
+    public Person(int id){this.id = id;}
+
+    public Person(Integer id , String name, String lastName , String email , String password, String state){
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -44,8 +46,13 @@ public class Person {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public boolean isState() { return state; }
-    public void setState(boolean state) { this.state = state; }
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
 
     public String getRol() {
         return rol;
@@ -59,10 +66,8 @@ public class Person {
 
     public void create(){}
     public void selectAll(){}
-    public void selectById(){}
+    public void selectById(int id){}
     public void update(){}
-    public void deleteById(){}
-    public boolean selectState(){return this.state;
-    }
+    public void deleteById(int id){}
     public void selectByRol(){}
 }

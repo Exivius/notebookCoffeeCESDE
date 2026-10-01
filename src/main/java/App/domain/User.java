@@ -6,7 +6,7 @@ public class User extends Person{
 
     public User(){ super();}
 
-    public User(Integer id, String name, String lastName, String email, String password, boolean state, String city) {
+    public User(Integer id, String name, String lastName, String email, String password, String state, String city) {
         super(id, name, lastName, email, password, state);
         City = city;
     }
@@ -26,18 +26,8 @@ public class User extends Person{
     public void update(){ super.update(); }
 
     @Override
-    public void selectById(){
-        super.selectById();
-    }
-
-    @Override
     public void selectAll(){
         super.selectAll();
-    }
-
-    @Override
-    public void deleteById(){
-        super.deleteById();
     }
 
     @Override
