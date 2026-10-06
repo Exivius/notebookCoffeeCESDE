@@ -5,6 +5,7 @@ import app.view.AdminView;
 import app.view.PaymentView;
 import app.view.PlaceView;
 import app.view.ProductView;
+import app.view.OrderView;
 
 public class CliUserInterface {
 
@@ -12,12 +13,15 @@ public class CliUserInterface {
     private final PaymentView paymentView;
     private final PlaceView placeView;
     private final ProductView productView;
+    // Vista que permite consultar y eliminar órdenes desde el menú.
+    private final OrderView orderView;
 
-    public CliUserInterface(AdminView adminView, PaymentView paymentView, PlaceView placeView, ProductView productView) {
+    public CliUserInterface(AdminView adminView, PaymentView paymentView, PlaceView placeView, ProductView productView, OrderView orderView) {
         this.adminView = adminView;
         this.paymentView = paymentView;
         this.placeView = placeView;
         this.productView = productView;
+        this.orderView = orderView;
     }
 
     public void applicationInit(){
@@ -50,7 +54,8 @@ public class CliUserInterface {
                 "2. Consultar Admin por id\n" +
                 "3. Consultar todos los admins\n" +
                 "4. Gestionar sedes\n" +
-                "5. Gestionar productos");
+                "5. Gestionar productos\n" +
+                "6. Gestionar órdenes");
         switch (option){
             case 1:
                 System.out.println("Registrar Usuario");
@@ -70,6 +75,9 @@ public class CliUserInterface {
                 break;
             case 5:
                 productMenu();
+                break;
+            case 6:
+                orderMenu();
                 break;
         }
     }
@@ -115,6 +123,45 @@ public class CliUserInterface {
             }
         } while (option != 0);
     }
+    private void orderMenu() {
+        int option;
+        // Repite el menú hasta que el usuario elija volver.
+        do {
+            option = DataTypeValidator.validateInt(
+                    "Gestión de órdenes:\n" +
+                    "1. Registrar orden\n" +
+                    "2. Consultar orden por ID\n" +
+                    "3. Consultar todas las órdenes\n" +
+                    "4. Actualizar orden\n" +
+                    "5. Eliminar orden\n" +
+                    "0. Volver"
+            );
+            switch (option) {
+                case 1:
+                case 4:
+                    // Estas operaciones necesitan seleccionar un usuario registrado.
+                    // Su servicio todavía no está disponible en esta rama.
+                    System.out.println("Para registrar o actualizar órdenes falta conectar la selección de usuarios.");
+                    break;
+                case 2:
+                    orderView.selectByOrderId();
+                    break;
+                case 3:
+                    orderView.selectAllOrders();
+                    break;
+                case 5:
+                    orderView.deleteById();
+                    break;
+                case 0:
+                    System.out.println("Saliendo del menú de órdenes.");
+                    break;
+                default:
+                    System.out.println("Seleccione una opción válida.");
+                    break;
+            }
+        } while (option != 0);
+    }
+
     private void productMenu() {
         int option;
         // Repite el menú hasta que el usuario seleccione cero.

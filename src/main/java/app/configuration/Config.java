@@ -21,6 +21,11 @@ import app.service.ProductServiceAdapter;
 import app.service.inputports.ProductServiceInterface;
 import app.service.outputports.ProductRepositoryPort;
 import app.view.ProductView;
+import app.repository.mappers.OrderRepositoryAdapter;
+import app.service.OrderServiceAdapter;
+import app.service.inputports.OrderServiceInterface;
+import app.service.outputports.OrderRepositoryPort;
+import app.view.OrderView;
 
 public class Config {
     public static CliUserInterface getCliUserInterface() {
@@ -47,7 +52,12 @@ public class Config {
         ProductServiceInterface productService = new ProductServiceAdapter(productRepositoryPort);
         ProductView productView = new ProductView(productService);
 
-        // Entrega ambas vistas para conservar los dos menús.
-        return new CliUserInterface(adminView, paymentView, placeView, productView);
+        // Conecta el repositorio de órdenes con su servicio y su vista.
+        OrderRepositoryPort orderRepositoryPort = new OrderRepositoryAdapter();
+        OrderServiceInterface orderService = new OrderServiceAdapter(orderRepositoryPort);
+        OrderView orderView = new OrderView(orderService);
+
+        // Entrega las vistas a la interfaz de consola.
+        return new CliUserInterface(adminView, paymentView, placeView, productView, orderView);
     }
 }
