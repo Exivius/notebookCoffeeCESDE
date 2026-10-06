@@ -1,14 +1,14 @@
 package app.domain;
 
-public class paymentMethod {
+public class PaymentMethod {
 
     private Integer methodId;
     private String methodName;
 
-    public paymentMethod() {
+    public PaymentMethod() {
     }
 
-    public paymentMethod(Integer methodId, String methodName) {
+    public PaymentMethod(Integer methodId, String methodName) {
         this.methodId = methodId;
         this.methodName = methodName;
     }
