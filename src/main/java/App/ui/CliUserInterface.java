@@ -1,22 +1,20 @@
 package app.ui;
 
-import app.domain.Payment;
-import app.repository.mappers.AdminRepositoryImplCollection;
-import app.service.AdminServiceImpl;
-import app.service.inputports.AdminService;
-import app.service.outputports.AdminRepository;
 import app.service.validators.DataTypeValidator;
 import app.view.AdminView;
 import app.view.PaymentView;
+import app.view.UserView;
 
 public class CliUserInterface {
 
     private final AdminView adminView;
     private final PaymentView paymentView;
+    private final UserView userView;
 
-    public CliUserInterface(AdminView adminView, PaymentView paymentView) {
+    public CliUserInterface(AdminView adminView, PaymentView paymentView, UserView userView) {
         this.adminView = adminView;
         this.paymentView = paymentView;
+        this.userView = userView;
     }
 
     public void applicationInit(){
@@ -50,11 +48,11 @@ public class CliUserInterface {
                 "3. Consultar todos los admins");
         switch (option){
             case 1:
-                System.out.println("Registrar Usuario");
+                System.out.println("Registrar Admin");
                 adminView.createAdmin();
                 break;
             case 2:
-                System.out.println("Consultar Usuario por id");
+                System.out.println("Consultar Admin por id");
                 int id = DataTypeValidator.validateInt("Ingrese el id del admin a consultar");
                 adminView.selectById(id);
                 break;
@@ -62,6 +60,8 @@ public class CliUserInterface {
                 System.out.println("Consultar todos los admins");
                 adminView.selectAdmins();
                 break;
+            case 4:
+                System.out.println();
         }
     }
 }

@@ -18,19 +18,24 @@ public class AdminRepositoryImplCollection implements AdminRepository {
 
     @Override
     public Admin selectById(int id) {
-
+        for (Admin admin : admins) {
+            if (admin.getId() != null && admin.getId() == id) {
+                return admin;
+            }
+        }
         return null;
     }
 
     @Override
     public Admin update(Admin admin) {
-
+        for (int index = 0; index < admins.size(); index++) {
+            Admin currentAdmin = admins.get(index);
+            if (currentAdmin.getId() != null && currentAdmin.getId().equals(admin.getId())) {
+                admins.set(index, admin);
+                return admin;
+            }
+        }
         return null;
-    }
-
-    @Override
-    public void delete(int id) {
-
     }
 
     @Override
@@ -42,6 +47,11 @@ public class AdminRepositoryImplCollection implements AdminRepository {
         }
 
         return admins;
+    }
+
+    @Override
+    public void deleteById(int id) {
+        admins.removeIf(admin -> admin.getId() != null && admin.getId() == id);
     }
 
 
