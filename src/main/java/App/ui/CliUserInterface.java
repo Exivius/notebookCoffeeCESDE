@@ -1,16 +1,23 @@
 package app.ui;
 
-import app.repository.AdminRepositoryImplCollection;
+import app.domain.Payment;
+import app.repository.mappers.AdminRepositoryImplCollection;
 import app.service.AdminServiceImpl;
 import app.service.inputports.AdminService;
 import app.service.outputports.AdminRepository;
 import app.service.validators.DataTypeValidator;
 import app.view.AdminView;
+import app.view.PaymentView;
 
-public class CliAdminInterface {
-    AdminRepository adminRepository = new AdminRepositoryImplCollection();
-    AdminService adminService = new AdminServiceImpl(adminRepository);
-    AdminView adminView = new AdminView(adminService);
+public class CliUserInterface {
+
+    private final AdminView adminView;
+    private final PaymentView paymentView;
+
+    public CliUserInterface(AdminView adminView, PaymentView paymentView) {
+        this.adminView = adminView;
+        this.paymentView = paymentView;
+    }
 
     public void applicationInit(){
         int init = DataTypeValidator.validateInt("Presione 1 para iniciar la aplicación");

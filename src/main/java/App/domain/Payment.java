@@ -2,18 +2,16 @@ package app.domain;
 
 public class Payment {
     private Integer paymentId;
-    private String paymentType;
-    private paymentMethod paymentMethod;
+    private PaymentMethod paymentMethod;
     private Order order;
 
     public Payment() {
     }
 
-    public Payment(Integer paymentId, String paymentType, paymentMethod paymentMethod, Order order) {
-        this.paymentId = paymentId;
-        this.paymentType = paymentType;
-        this.paymentMethod = paymentMethod;
-        this.order = order;
+    public Payment(Integer id, PaymentMethod paymentMethod, Order order) {
+        this.paymentId = id;
+        this.paymentMethod = new PaymentMethod();
+        this.order = new Order();
     }
 
     public Integer getPaymentId() {
@@ -24,19 +22,11 @@ public class Payment {
         this.paymentId = paymentId;
     }
 
-    public String getPaymentType() {
-        return paymentType;
-    }
-
-    public void setPaymentType(String paymentType) {
-        this.paymentType = paymentType;
-    }
-
-    public paymentMethod getPaymentMethod() {
+    public PaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(paymentMethod paymentMethod) {
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 
@@ -47,22 +37,4 @@ public class Payment {
     public void setOrder(Order order) {
         this.order = order;
     }
-
-    //metodos
-    public void createPayment() {
-    }
-
-    public void selectAllPayments() {
-    }
-
-    public void selectPaymentById() {
-    }
-
-    public void deletePaymentdById() {
-    }
-
-    public void updatePayment() {
-    }
-
-    public void generateReceipt(){}
 }

@@ -1,4 +1,4 @@
-package app.repository;
+package app.repository.mappers;
 
 import app.domain.Admin;
 import app.service.outputports.AdminRepository;
