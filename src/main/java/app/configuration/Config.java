@@ -11,6 +11,11 @@ import app.service.outputports.PaymentRepositoryPort;
 import app.ui.CliUserInterface;
 import app.view.AdminView;
 import app.view.PaymentView;
+import app.repository.mappers.ProductRepositoryAdapter;
+import app.service.ProductServiceAdapter;
+import app.service.inputports.ProductServiceInterface;
+import app.service.outputports.ProductRepositoryPort;
+import app.view.ProductView;
 
 public class Config {
     public static CliUserInterface getCliUserInterface() {
@@ -23,6 +28,11 @@ public class Config {
         PaymentServiceInterface paymentServiceInterface = new PaymentServiceAdapter(paymentRepositoryPort);
         PaymentView paymentView = new PaymentView(paymentServiceInterface);
 
-        return new CliUserInterface(adminView, paymentView);
+        // Conecta el repositorio de productos con el servicio y la vista.
+        ProductRepositoryPort productRepositoryPort = new ProductRepositoryAdapter();
+        ProductServiceInterface productService = new ProductServiceAdapter(productRepositoryPort);
+        ProductView productView = new ProductView(productService);
+
+        return new CliUserInterface(adminView, paymentView, productView);
     }
 }
