@@ -4,17 +4,20 @@ import app.service.validators.DataTypeValidator;
 import app.view.AdminView;
 import app.view.PaymentView;
 import app.view.PlaceView;
+import app.view.ProductView;
 
 public class CliUserInterface {
 
     private final AdminView adminView;
     private final PaymentView paymentView;
     private final PlaceView placeView;
+    private final ProductView productView;
 
-    public CliUserInterface(AdminView adminView, PaymentView paymentView, PlaceView placeView) {
+    public CliUserInterface(AdminView adminView, PaymentView paymentView, PlaceView placeView, ProductView productView) {
         this.adminView = adminView;
         this.paymentView = paymentView;
         this.placeView = placeView;
+        this.productView = productView;
     }
 
     public void applicationInit(){
@@ -46,7 +49,8 @@ public class CliUserInterface {
         int option = DataTypeValidator.validateInt("Seleccione:\n1. Registrar admin\n" +
                 "2. Consultar Admin por id\n" +
                 "3. Consultar todos los admins\n" +
-                "4. Gestionar sedes");
+                "4. Gestionar sedes\n" +
+                "5. Gestionar productos");
         switch (option){
             case 1:
                 System.out.println("Registrar Usuario");
@@ -63,6 +67,9 @@ public class CliUserInterface {
                 break;
             case 4:
                 placeMenu();
+                break;
+            case 5:
+                productMenu();
                 break;
         }
     }
@@ -101,6 +108,45 @@ public class CliUserInterface {
                     break;
                 case 0:
                     System.out.println("Saliendo del menú de sedes.");
+                    break;
+                default:
+                    System.out.println("Seleccione una opción válida.");
+                    break;
+            }
+        } while (option != 0);
+    }
+    private void productMenu() {
+        int option;
+        // Repite el menú hasta que el usuario seleccione cero.
+        do {
+            option = DataTypeValidator.validateInt(
+                    "Gestión de productos:\n" +
+                    "1. Registrar producto\n" +
+                    "2. Consultar producto por ID\n" +
+                    "3. Consultar todos los productos\n" +
+                    "4. Actualizar producto\n" +
+                    "5. Eliminar producto\n" +
+                    "0. Volver"
+            );
+            // Ejecuta la operación elegida mediante la vista.
+            switch (option) {
+                case 1:
+                    productView.createProduct();
+                    break;
+                case 2:
+                    productView.selectById();
+                    break;
+                case 3:
+                    productView.selectAllProducts();
+                    break;
+                case 4:
+                    productView.updateProduct();
+                    break;
+                case 5:
+                    productView.deleteById();
+                    break;
+                case 0:
+                    System.out.println("Saliendo del menú de productos.");
                     break;
                 default:
                     System.out.println("Seleccione una opción válida.");

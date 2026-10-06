@@ -16,6 +16,11 @@ import app.service.PlaceServiceAdapter;
 import app.service.inputports.PlaceServiceInterface;
 import app.service.outputports.PlaceRepositoryPort;
 import app.view.PlaceView;
+import app.repository.mappers.ProductRepositoryAdapter;
+import app.service.ProductServiceAdapter;
+import app.service.inputports.ProductServiceInterface;
+import app.service.outputports.ProductRepositoryPort;
+import app.view.ProductView;
 
 public class Config {
     public static CliUserInterface getCliUserInterface() {
@@ -37,6 +42,12 @@ public class Config {
         // Conecta la vista con el servicio.
         PlaceView placeView = new PlaceView(placeService);
 
-        return new CliUserInterface(adminView, paymentView, placeView);
+        // Conecta los productos con su repositorio, servicio y vista.
+        ProductRepositoryPort productRepositoryPort = new ProductRepositoryAdapter();
+        ProductServiceInterface productService = new ProductServiceAdapter(productRepositoryPort);
+        ProductView productView = new ProductView(productService);
+
+        // Entrega ambas vistas para conservar los dos menús.
+        return new CliUserInterface(adminView, paymentView, placeView, productView);
     }
 }
