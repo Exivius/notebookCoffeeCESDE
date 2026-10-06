@@ -11,6 +11,11 @@ import app.service.outputports.PaymentRepositoryPort;
 import app.ui.CliUserInterface;
 import app.view.AdminView;
 import app.view.PaymentView;
+import app.repository.mappers.PlaceRepositoryAdapter;
+import app.service.PlaceServiceAdapter;
+import app.service.inputports.PlaceServiceInterface;
+import app.service.outputports.PlaceRepositoryPort;
+import app.view.PlaceView;
 
 public class Config {
     public static CliUserInterface getCliUserInterface() {
@@ -23,6 +28,15 @@ public class Config {
         PaymentServiceInterface paymentServiceInterface = new PaymentServiceAdapter(paymentRepositoryPort);
         PaymentView paymentView = new PaymentView(paymentServiceInterface);
 
-        return new CliUserInterface(adminView, paymentView);
+        // Crea el repositorio que almacenará las sedes en memoria.
+        PlaceRepositoryPort placeRepositoryPort = new PlaceRepositoryAdapter();
+
+        // Conecta el servicio con ese repositorio.
+        PlaceServiceInterface placeService = new PlaceServiceAdapter(placeRepositoryPort);
+
+        // Conecta la vista con el servicio.
+        PlaceView placeView = new PlaceView(placeService);
+
+        return new CliUserInterface(adminView, paymentView, placeView);
     }
 }
