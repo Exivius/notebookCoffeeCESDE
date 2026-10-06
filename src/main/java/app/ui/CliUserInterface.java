@@ -6,6 +6,7 @@ import app.view.PaymentView;
 import app.view.PlaceView;
 import app.view.ProductView;
 import app.view.OrderView;
+import app.view.UserView;
 
 public class CliUserInterface {
 
@@ -15,13 +16,15 @@ public class CliUserInterface {
     private final ProductView productView;
     // Vista que permite consultar y eliminar órdenes desde el menú.
     private final OrderView orderView;
+    private final UserView userView;
 
-    public CliUserInterface(AdminView adminView, PaymentView paymentView, PlaceView placeView, ProductView productView, OrderView orderView) {
+    public CliUserInterface(AdminView adminView, PaymentView paymentView, PlaceView placeView, ProductView productView, OrderView orderView, UserView userView) {
         this.adminView = adminView;
         this.paymentView = paymentView;
         this.placeView = placeView;
         this.productView = productView;
         this.orderView = orderView;
+        this.userView = userView;
     }
 
     public void applicationInit(){
@@ -55,7 +58,8 @@ public class CliUserInterface {
                 "3. Consultar todos los admins\n" +
                 "4. Gestionar sedes\n" +
                 "5. Gestionar productos\n" +
-                "6. Gestionar órdenes");
+                "6. Gestionar órdenes\n" +
+                "7. Gestionar usuarios");
         switch (option){
             case 1:
                 System.out.println("Registrar Usuario");
@@ -78,6 +82,9 @@ public class CliUserInterface {
                 break;
             case 6:
                 orderMenu();
+                break;
+            case 7:
+                userMenu();
                 break;
         }
     }
@@ -138,10 +145,10 @@ public class CliUserInterface {
             );
             switch (option) {
                 case 1:
+                    orderView.createOrder();
+                    break;
                 case 4:
-                    // Estas operaciones necesitan seleccionar un usuario registrado.
-                    // Su servicio todavía no está disponible en esta rama.
-                    System.out.println("Para registrar o actualizar órdenes falta conectar la selección de usuarios.");
+                    orderView.updateOrder();
                     break;
                 case 2:
                     orderView.selectByOrderId();
@@ -194,6 +201,35 @@ public class CliUserInterface {
                     break;
                 case 0:
                     System.out.println("Saliendo del menú de productos.");
+                    break;
+                default:
+                    System.out.println("Seleccione una opción válida.");
+                    break;
+            }
+        } while (option != 0);
+    }
+    private void userMenu() {
+        int option;
+        // Utiliza las operaciones de la vista de usuarios.
+        do {
+            option = DataTypeValidator.validateInt(
+                    "Usuarios:\n1. Registrar\n2. Consultar por ID\n3. Actualizar\n4. Eliminar\n0. Volver");
+            switch (option) {
+                case 1:
+                    userView.createUser();
+                    break;
+                case 2:
+                    int searchId = DataTypeValidator.validateInt("Ingrese el ID del usuario:");
+                    userView.SelectUserById(searchId);
+                    break;
+                case 3:
+                    userView.update();
+                    break;
+                case 4:
+                    int deleteId = DataTypeValidator.validateInt("Ingrese el ID del usuario a eliminar:");
+                    userView.delete(deleteId);
+                    break;
+                case 0:
                     break;
                 default:
                     System.out.println("Seleccione una opción válida.");

@@ -27,6 +27,11 @@ import app.service.inputports.OrderServiceInterface;
 import app.service.outputports.OrderRepositoryPort;
 import app.view.OrderView;
 
+import app.repository.mappers.UserRepositoryAdapter;
+import app.service.UserServiceAdapter;
+import app.service.inputports.UserServiceInterface;
+import app.service.outputports.UserRepositoryPort;
+import app.view.UserView;
 public class Config {
     public static CliUserInterface getCliUserInterface() {
 
@@ -55,9 +60,13 @@ public class Config {
         // Conecta el repositorio de órdenes con su servicio y su vista.
         OrderRepositoryPort orderRepositoryPort = new OrderRepositoryAdapter();
         OrderServiceInterface orderService = new OrderServiceAdapter(orderRepositoryPort);
-        OrderView orderView = new OrderView(orderService);
+        // Comparte el servicio de usuarios con las dos vistas.
+        UserRepositoryPort userRepository = new UserRepositoryAdapter();
+        UserServiceInterface userService = new UserServiceAdapter(userRepository);
+        UserView userView = new UserView(userService);
+        OrderView orderView = new OrderView(orderService, placeService, userService, productService);
 
         // Entrega las vistas a la interfaz de consola.
-        return new CliUserInterface(adminView, paymentView, placeView, productView, orderView);
+        return new CliUserInterface(adminView, paymentView, placeView, productView, orderView, userView);
     }
 }

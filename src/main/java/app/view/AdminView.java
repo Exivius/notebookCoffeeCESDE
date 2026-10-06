@@ -1,5 +1,6 @@
 package app.view;
 
+import app.domain.Admin;
 import app.service.AdminServiceImpl;
 import app.service.helpers.SetAdminState;
 import app.service.inputports.AdminService;
@@ -25,10 +26,34 @@ public class AdminView {
     }
 
     public void selectById(int id) {
-        // Implementación para seleccionar un administrador por ID
+        adminService.selectAdminById(id);        // Implementación para seleccionar un administrador por ID
+    }
+
+    public void update(){
+        int id = DataTypeValidator.validateInt("Ingrese el ID del administrador a actualizar: ");
+        Admin currentAdmin = adminService.selectAdminById(id);
+        if (currentAdmin == null) {
+            System.out.println("No se encontró un administrador con ese ID");
+            return;
+        }
+        String name = DataTypeValidator.validateString("Ingrese el nuevo nombre del administrador: ");
+        String lastName = DataTypeValidator.validateString("Ingrese el nuevo apellido del administrador: ");
+        String email = DataTypeValidator.validateString("Ingrese el nuevo correo del administrador: ");
+        String password = DataTypeValidator.validateString("Ingrese la nueva contraseña del administrador: ");
+        System.out.println("Ingrese el nuevo estado del administrador: ");
+        String state = SetAdminState.getAdminState();
+        Admin updatedAdmin = new Admin(id, name, lastName, email, password, state);
+        if (adminService.update(updatedAdmin) == null) {
+            System.out.println("Error al actualizar el administrador.");
+        }
     }
 
     public void selectAdmins(){
         adminService.selectAdmins();
     }
+
+    public void deleteAdmin(int id){
+        adminService.deleteAdmin(id);
+    }
+
 }

@@ -5,6 +5,9 @@ import app.domain.Place;
 import app.domain.User;
 import app.domain.Products;
 import app.service.inputports.OrderServiceInterface;
+import app.service.inputports.PlaceServiceInterface;
+import app.service.inputports.UserServiceInterface;
+import app.service.inputports.ProductServiceInterface;
 import app.service.validators.DataTypeValidator;
 
 import java.util.List;
@@ -13,10 +16,40 @@ public class OrderView {
 
     // La vista usa el servicio para gestionar las órdenes.
     private final OrderServiceInterface orderService;
+    private final PlaceServiceInterface placeService;
+    private final UserServiceInterface userService;
+    private final ProductServiceInterface productService;
 
     // Recibe el servicio por el constructor.
-    public OrderView(OrderServiceInterface orderService) {
+    public OrderView(OrderServiceInterface orderService, PlaceServiceInterface placeService,
+                     UserServiceInterface userService, ProductServiceInterface productService) {
         this.orderService = orderService;
+        this.placeService = placeService;
+        this.userService = userService;
+        this.productService = productService;
+    }
+
+    public void createOrder() {
+        // Busca objetos registrados usando los servicios compartidos.
+        int placeId = DataTypeValidator.validateInt("Ingrese el ID de la sede:");
+        int userId = DataTypeValidator.validateInt("Ingrese el ID del usuario:");
+        int productId = DataTypeValidator.validateInt("Ingrese el ID del producto:");
+        Place place = placeService.selectPlaceById(placeId);
+        User user = userService.selectUserById(userId);
+        Products product = productService.selectById(productId);
+        // Reutiliza el método que valida y registra la orden.
+        createOrder(place, user, product);
+    }
+
+    public void updateOrder() {
+        // Busca las nuevas relaciones entre objetos registrados.
+        int placeId = DataTypeValidator.validateInt("Ingrese el nuevo ID de sede:");
+        int userId = DataTypeValidator.validateInt("Ingrese el nuevo ID de usuario:");
+        int productId = DataTypeValidator.validateInt("Ingrese el nuevo ID de producto:");
+        Place place = placeService.selectPlaceById(placeId);
+        User user = userService.selectUserById(userId);
+        Products product = productService.selectById(productId);
+        updateOrder(place, user, product);
     }
 
     public void createOrder(Place place, User user, Products products) {

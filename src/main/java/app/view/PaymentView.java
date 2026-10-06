@@ -26,15 +26,10 @@ public class PaymentView {
 
     public void selectAllPayments() {
         for (var payment : paymentServiceInterface.selectAllPayments()) {
-            System.out.println(payment.getPaymentId() + " " + payment.getAmount() + " "
-                    + payment.getMethod() + " " + payment.getStatus() + " " + payment.getDate());
+            System.out.println(payment.getPaymentId() + " "
+                    + payment.getPaymentMethod().getMethodName() + " "
+                    + payment.getOrder().getOrderId());
         }
-    }
-
-    public void selectPaymentById() {
-    }
-
-    public void deletePaymentdById() {
     }
 
     public void updatePayment() {
