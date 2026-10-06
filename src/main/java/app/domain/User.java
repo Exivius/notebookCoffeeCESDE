@@ -19,19 +19,5 @@ public class User extends Person{
         City = city;
     }
 
-    @Override
-    public void create(){ super.create(); }
 
-    @Override
-    public void update(){ super.update(); }
-
-    @Override
-    public void selectAll(){
-        super.selectAll();
-    }
-
-    @Override
-    public void selectByRol() {
-        super.selectByRol();
-    }
 }
