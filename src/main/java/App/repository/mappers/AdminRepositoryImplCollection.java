@@ -54,5 +54,10 @@ public class AdminRepositoryImplCollection implements AdminRepository {
         admins.removeIf(admin -> admin.getId() != null && admin.getId() == id);
     }
 
+    @Override
+    public void deleteAdmin(int id) {
+        deleteById(id);
+    }
+
 
 }
