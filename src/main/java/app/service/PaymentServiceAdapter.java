@@ -41,9 +41,7 @@ public class PaymentServiceAdapter implements PaymentServiceInterface {
     }
 
     @Override
-    public Payment updatePayment(Integer id, Integer userId, Integer orderId, Double amount, String paymentMethod, String paymentStatus, String paymentDate) {
-        Payment payment = new Payment(id, new PaymentMethod(null, paymentMethod),
-                new Order(orderId, null, null, null));
+    public Payment updatePayment(Payment payment) {
         return paymentRepositoryPort.update(payment);
     }
 

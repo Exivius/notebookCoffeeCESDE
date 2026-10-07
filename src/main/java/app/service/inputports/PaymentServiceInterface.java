@@ -13,7 +13,8 @@ public interface PaymentServiceInterface {
 
     public Payment deletePaymentdById(int id);
 
-    public Payment updatePayment(Integer id, Integer userId, Integer orderId, Double amount, String paymentMethod, String paymentStatus, String paymentDate);
+    public Payment updatePayment(Payment payment);
 
     public Payment generateReceipt();
+
 }
