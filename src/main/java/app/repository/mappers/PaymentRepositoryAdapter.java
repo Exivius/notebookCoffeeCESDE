@@ -18,7 +18,10 @@ public class PaymentRepositoryAdapter implements PaymentRepositoryPort {
 
     @Override
     public List<Payment> findAll() {
-        return List.of();
+        for(Payment payment : payments) {
+            System.out.println(payment.getPaymentId() + " " + payment.getPaymentMethod() + " " + payment.getOrder().getOrderId());
+        }
+        return payments;
     }
 
     @Override
@@ -28,7 +31,7 @@ public class PaymentRepositoryAdapter implements PaymentRepositoryPort {
 
     @Override
     public void deleteById(int id) {
-
+        payments.removeIf(payment -> payment.getPaymentId() != null && payment.getPaymentId() != id);
     }
 
     @Override

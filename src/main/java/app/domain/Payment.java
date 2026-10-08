@@ -4,6 +4,7 @@ public class Payment {
     private Integer paymentId;
     private PaymentMethod paymentMethod;
     private Order order;
+    private String paymentDate;
 
     public Payment() {
     }
@@ -36,5 +37,9 @@ public class Payment {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public String getPaymentDate() {
+        return paymentDate;
     }
 }
