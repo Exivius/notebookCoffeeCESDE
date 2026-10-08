@@ -5,14 +5,17 @@ public class Payment {
     private PaymentMethod paymentMethod;
     private Order order;
     private String paymentDate;
+    private Integer userId;
+    private Double amount;
+    private String paymentStatus;
 
     public Payment() {
     }
 
     public Payment(Integer id, PaymentMethod paymentMethod, Order order) {
         this.paymentId = id;
-        this.paymentMethod = new PaymentMethod();
-        this.order = new Order();
+        this.paymentMethod = paymentMethod;
+        this.order = order;
     }
 
     public Integer getPaymentId() {
@@ -42,4 +45,12 @@ public class Payment {
     public String getPaymentDate() {
         return paymentDate;
     }
+
+    public void setPaymentDate(String paymentDate) { this.paymentDate = paymentDate; }
+    public Integer getUserId() { return userId; }
+    public void setUserId(Integer userId) { this.userId = userId; }
+    public Double getAmount() { return amount; }
+    public void setAmount(Double amount) { this.amount = amount; }
+    public String getPaymentStatus() { return paymentStatus; }
+    public void setPaymentStatus(String paymentStatus) { this.paymentStatus = paymentStatus; }
 }

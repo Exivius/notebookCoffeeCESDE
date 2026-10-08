@@ -10,9 +10,12 @@ public class Admin extends Person {
     public Admin(Integer id, String name, String lastName, String email, String password, String state, String area) {
         super(id, name, lastName, email, password, state);
         this.area = area;
+        setRol("ADMIN");
     }
 
     public Admin(Integer id, String name, String lastName, String email, String password, String state) {
+        super(id, name, lastName, email, password, state);
+        setRol("ADMIN");
     }
 
     public String getArea() {

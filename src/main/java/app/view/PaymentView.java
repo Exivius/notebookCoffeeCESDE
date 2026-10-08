@@ -4,11 +4,12 @@ package app.view;
 import app.domain.Order;
 import app.domain.Payment;
 import app.domain.PaymentMethod;
+import app.domain.User;
 import app.service.helpers.SetPaymentMethod;
 import app.service.inputports.PaymentServiceInterface;
 import app.service.validators.DataTypeValidator;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class PaymentView {
 
@@ -20,12 +21,32 @@ public class PaymentView {
     }
 
     public void createPayment() {
-        int id = Math.toIntExact(System.currentTimeMillis());
+        int userId = DataTypeValidator.validateInt("Ingrese el ID del usuario: ");
+        int orderId = DataTypeValidator.validateInt("Ingrese el ID de la orden: ");
+        createPayment(userId, orderId);
+    }
+
+    public void createPayment(User user) {
+        int orderId = DataTypeValidator.validateInt("Ingrese el ID de la orden: ");
+        createPayment(user.getId(), orderId);
+    }
+
+    private void createPayment(int userId, int orderId) {
         String method = SetPaymentMethod.getPaymentMethod();
-        double amount = DataTypeValidator.validateDouble("Ingrese el monto del pago: ");
-        Date date = new Date(System.currentTimeMillis());
-        Order order = new Order();
-        paymentServiceInterface.createPayment(id, null, null, amount, method, "pending", date.toString());
+        Payment payment = paymentServiceInterface.createPayment(null, userId, orderId, 0D,
+                method, "paid", LocalDateTime.now().toString());
+        if (payment == null) {
+            System.out.println("No existe la orden indicada.");
+            return;
+        }
+        double total = 0;
+        for (int i = 0; i < payment.getOrder().getProductList().size(); i++) {
+            total += payment.getOrder().getProductList().get(i).getProductPrice()
+                    * payment.getOrder().getQuantities().get(i);
+        }
+        payment.setAmount(total);
+        paymentServiceInterface.updatePayment(payment);
+        System.out.println("Pago registrado correctamente. ID: " + payment.getPaymentId());
     }
 
     public void selectAllPayments() {
@@ -44,9 +65,13 @@ public class PaymentView {
             return;
         }
         String method = SetPaymentMethod.getPaymentMethod();
-        double amount = DataTypeValidator.validateDouble("Ingrese el monto del pago: ");
-        Order order = new Order();
-        paymentServiceInterface.updatePayment(new Payment(currentPayment.getPaymentId(), new PaymentMethod(null, method), order));
+        Payment updated = new Payment(currentPayment.getPaymentId(),
+                new PaymentMethod(null, method), currentPayment.getOrder());
+        updated.setUserId(currentPayment.getUserId());
+        updated.setAmount(currentPayment.getAmount());
+        updated.setPaymentDate(currentPayment.getPaymentDate());
+        updated.setPaymentStatus(currentPayment.getPaymentStatus());
+        paymentServiceInterface.updatePayment(updated);
     }
 
     public void generateReceipt(){
@@ -61,5 +86,12 @@ public class PaymentView {
         System.out.println("Método de Pago: " + payment.getPaymentMethod().getMethodName());
         System.out.println("Fecha: " + payment.getPaymentDate());
         System.out.println("Numero de Orden: " + payment.getOrder().getOrderId());
+        System.out.println("ID del Usuario: " + payment.getUserId());
+        for (int i = 0; i < payment.getOrder().getProductList().size(); i++) {
+            System.out.println("Producto: " + payment.getOrder().getProductList().get(i).getProductName()
+                    + " | Cantidad: " + payment.getOrder().getQuantities().get(i)
+                    + " | Precio: " + payment.getOrder().getProductList().get(i).getProductPrice());
+        }
+        System.out.println("Total: " + payment.getAmount());
     }
 }

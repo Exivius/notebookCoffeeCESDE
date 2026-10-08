@@ -5,6 +5,7 @@ import app.service.outputports.UserRepositoryPort;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class UserRepositoryAdapter implements UserRepositoryPort {
 
@@ -12,6 +13,9 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
 
     @Override
     public User save(User user) {
+        if (selectById(user.getId()) != null) {
+            return null;
+        }
         users.add(user);
         return user;
     }
@@ -19,7 +23,7 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     @Override
     public User selectById(int id) {
         for(User user : users) {
-            if(user.getId() != null && user.getId() == id) {
+            if(Objects.equals(user.getId(), id)) {
                 return user;
             }
         }
@@ -41,7 +45,7 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     public User updateUser(User user) {
         for(int index = 0; index < users.size(); index++) {
             User currentUser = users.get(index);
-            if(currentUser.getId() != null && currentUser.getId().equals(user.getId())) {
+            if(Objects.equals(currentUser.getId(), user.getId())) {
                 users.set(index, user);
                 return user;
             }
@@ -51,7 +55,7 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
 
     @Override
     public void deleteById(int id) {
-        users.removeIf(user -> user.getId() != null && user.getId() == id);
+        users.removeIf(user -> Objects.equals(user.getId(), id));
     }
 
     @Override

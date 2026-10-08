@@ -11,6 +11,8 @@ public interface OrderServiceInterface {
 
     // Crea una orden con la sede, el usuario y el producto recibidos.
     Order createOrder(Integer orderId, Place place, User user, Products products);
+    Order createOrder(Integer orderId, Place place, User user, List<Products> products,
+                      List<Integer> quantities);
 
     // Busca una orden por su ID.
     Order selectByOrderId(Integer orderId);

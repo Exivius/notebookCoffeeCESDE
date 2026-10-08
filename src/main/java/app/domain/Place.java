@@ -3,14 +3,12 @@ package app.domain;
 public class Place {
     private Integer placeId;
     private String placeName;
-    private String placeType;
 
     public Place(){}
 
-    public Place(Integer placeId, String placeName, String placeType) {
+    public Place(Integer placeId, String placeName) {
         this.placeId = placeId;
         this.placeName = placeName;
-        this.placeType = placeType;
     }
 
     public Integer getPlaceId() {
@@ -27,14 +25,6 @@ public class Place {
 
     public void setPlaceName(String placeName) {
         this.placeName = placeName;
-    }
-
-    public String getPlaceType() {
-        return placeType;
-    }
-
-    public void setPlaceType(String placeType) {
-        this.placeType = placeType;
     }
 
     //metodos

@@ -2,31 +2,19 @@ package app.service.helpers;
 
 import app.domain.enums.SelectStateEnum;
 
-import java.util.Scanner;
+import app.service.validators.DataTypeValidator;
 
 public class SetAdminState {
-    static Scanner sc = new Scanner(System.in);
-
     public static String getAdminState(){
-
-        System.out.println("Seleccione 1. Activo 2. Inactivo 3. Bloqueado");
-        int option = sc.nextInt();
-        String state = "";
-        sc.nextLine();
-        switch (option){
-            case 1:
-                state = SelectStateEnum.ACTIVE.getState();
-                break;
-            case 2:
-                state = SelectStateEnum.INACTIVE.getState();
-                break;
-            case 3:
-                state = SelectStateEnum.BLOCKED.getState();
-                break;
-            default:
-                System.out.println("Opción no valida");
+        while (true) {
+            System.out.println("Seleccione 1. Activo 2. Inactivo 3. Bloqueado");
+            int option = DataTypeValidator.validateInt("Estado:");
+            switch (option){
+                case 1: return SelectStateEnum.ACTIVE.getState();
+                case 2: return SelectStateEnum.INACTIVE.getState();
+                case 3: return SelectStateEnum.BLOCKED.getState();
+                default: System.out.println("Opción no valida");
+            }
         }
-
-        return state;
     }
 }

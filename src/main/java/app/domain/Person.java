@@ -21,10 +21,8 @@ public class Person {
         this.name = name;
         this.lastName = lastName;
         this.email = email;
-        this.phone = phone;
         this.password = password;
         this.state = state;
-        this.rol= rol;
     }
 
 

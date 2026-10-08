@@ -11,7 +11,7 @@ public enum SelectProductosEnum {
         this.producto = producto;
     }
 
-    public String getProducto() {
+    public String getProduct() {
         return this.producto;
     }
 }

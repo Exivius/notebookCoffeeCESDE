@@ -28,6 +28,13 @@ public class OrderServiceAdapter implements OrderServiceInterface {
     }
 
     @Override
+    public Order createOrder(Integer orderId, Place place, User user, List<Products> products,
+                             List<Integer> quantities) {
+        Order order = new Order(orderId, place, user, products, quantities);
+        return orderRepositoryPort.save(order);
+    }
+
+    @Override
     public Order updateOrder(Integer orderId, Place place, User user, Products products) {
         // Conserva el ID y construye una orden con los nuevos datos.
         Order order = new Order(orderId, place, user, products);
