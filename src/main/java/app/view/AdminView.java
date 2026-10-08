@@ -5,6 +5,7 @@ import app.service.AdminServiceImpl;
 import app.service.helpers.SetAdminState;
 import app.service.inputports.AdminService;
 import app.service.validators.DataTypeValidator;
+import java.util.List;
 
 public class AdminView {
     private final AdminService adminService;
@@ -22,11 +23,21 @@ public class AdminView {
         System.out.println("Ingrese el estado del administrador: ");
         String state = SetAdminState.getAdminState();
 
-        adminService.create(id, name, lastName, email, password, state);
+        Admin admin = adminService.create(id, name, lastName, email, password, state);
+        if (admin == null) {
+            System.out.println("Ya existe un administrador con ese ID.");
+        }
     }
 
     public void selectById(int id) {
-        adminService.selectAdminById(id);        // Implementación para seleccionar un administrador por ID
+        Admin admin = adminService.selectAdminById(id);
+        if (admin == null) {
+            System.out.println("No se encontró un administrador con ese ID.");
+            return;
+        }
+        System.out.println(admin.getId() + " | " + admin.getName() + " " + admin.getLastName()
+                + " | " + admin.getEmail() + " | Rol: " + admin.getRol()
+                + " | Estado: " + admin.getState());
     }
 
     public void update(){
@@ -50,6 +61,20 @@ public class AdminView {
 
     public void selectAdmins(){
         adminService.selectAdmins();
+    }
+
+    public Admin login(String email, String password) {
+        for (Admin admin : adminService.selectAdmins()) {
+            if (email.equals(admin.getEmail()) && password.equals(admin.getPassword())
+                    && "Activo".equals(admin.getState())) {
+                return admin;
+            }
+        }
+        return null;
+    }
+
+    public Admin selectByIdValue(int id) {
+        return adminService.selectAdminById(id);
     }
 
     public void deleteAdmin(int id){

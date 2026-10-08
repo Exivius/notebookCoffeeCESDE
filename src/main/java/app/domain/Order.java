@@ -1,70 +1,56 @@
 package app.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Order {
     private Integer orderId;
     private Place place;
     private User user;
-    private Products products;
+    private List<Products> products = new ArrayList<>();
+    private List<Integer> quantities = new ArrayList<>();
 
-    // constructor vacio
     public Order() {}
 
-    public Order(Integer orderId, Place place, User user, Products products) {
+    public Order(Integer orderId, Place place, User user, Products product) {
         this.orderId = orderId;
         this.place = place;
         this.user = user;
-        this.products = products;
+        if (product != null) {
+            products.add(product);
+            quantities.add(1);
+        }
     }
 
-    public Integer getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Integer orderId) {
+    public Order(Integer orderId, Place place, User user, List<Products> products,
+                 List<Integer> quantities) {
         this.orderId = orderId;
-    }
-
-    public Place getPlace() {
-        return place;
-    }
-
-    public void setPlace(Place place) {
         this.place = place;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
         this.user = user;
+        this.products = new ArrayList<>(products);
+        this.quantities = new ArrayList<>(quantities);
     }
+
+    public Integer getOrderId() { return orderId; }
+    public void setOrderId(Integer orderId) { this.orderId = orderId; }
+    public Place getPlace() { return place; }
+    public void setPlace(Place place) { this.place = place; }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 
     public Products getProducts() {
-        return products;
+        return products.isEmpty() ? null : products.get(0);
     }
 
-    public void setProducts(Products products) {
-        this.products = products;
+    public void setProducts(Products product) {
+        products.clear();
+        quantities.clear();
+        if (product != null) {
+            products.add(product);
+            quantities.add(1);
+        }
     }
 
-    //metodos
-
-    public void createOrder(){
-    }
-    public void selecAllOrders(){
-    }
-    public void selectOrderById(){
-    }
-    public void updateOrder(){
-    }
-    public void deleteOrderById(int id){
-    }
-    public void generateReceipt(){
-    }
-    public void applyDiscunt(){
-    }
-
-
-
+    public List<Products> getProductList() { return new ArrayList<>(products); }
+    public List<Integer> getQuantities() { return new ArrayList<>(quantities); }
 }

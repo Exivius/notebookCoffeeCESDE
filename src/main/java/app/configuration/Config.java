@@ -39,10 +39,6 @@ public class Config {
         AdminService adminService = new AdminServiceImpl(adminRepository);
         AdminView adminView = new AdminView(adminService);
 
-        PaymentRepositoryPort paymentRepositoryPort = new PaymentRepositoryAdapter();
-        PaymentServiceInterface paymentServiceInterface = new PaymentServiceAdapter(paymentRepositoryPort);
-        PaymentView paymentView = new PaymentView(paymentServiceInterface);
-
         // Crea el repositorio que almacenará las sedes en memoria.
         PlaceRepositoryPort placeRepositoryPort = new PlaceRepositoryAdapter();
 
@@ -60,6 +56,9 @@ public class Config {
         // Conecta el repositorio de órdenes con su servicio y su vista.
         OrderRepositoryPort orderRepositoryPort = new OrderRepositoryAdapter();
         OrderServiceInterface orderService = new OrderServiceAdapter(orderRepositoryPort);
+        PaymentRepositoryPort paymentRepositoryPort = new PaymentRepositoryAdapter();
+        PaymentServiceInterface paymentServiceInterface = new PaymentServiceAdapter(paymentRepositoryPort, orderService);
+        PaymentView paymentView = new PaymentView(paymentServiceInterface);
         // Comparte el servicio de usuarios con las dos vistas.
         UserRepositoryPort userRepository = new UserRepositoryAdapter();
         UserServiceInterface userService = new UserServiceAdapter(userRepository);
@@ -67,6 +66,23 @@ public class Config {
         OrderView orderView = new OrderView(orderService, placeService, userService, productService);
 
         // Entrega las vistas a la interfaz de consola.
+        seedData(adminService, userService, placeService, productService);
         return new CliUserInterface(adminView, paymentView, placeView, productView, orderView, userView);
+    }
+
+    private static void seedData(AdminService adminService, UserServiceInterface userService,
+                                 PlaceServiceInterface placeService,
+                                 ProductServiceInterface productService) {
+        adminService.create(1, "Administrador", "Principal", "admin@coffee.com",
+                "admin123", "Activo");
+        adminService.create(2, "Administrador", "Ventas", "ventas@coffee.com",
+                "admin123", "Activo");
+        userService.createUser(1, "Usuario", "Prueba", "usuario@coffee.com",
+                "user123", "Activo", "Medellín");
+        userService.createUser(2, "Cliente", "Prueba", "cliente@coffee.com",
+                "user123", "Activo", "Bello");
+        productService.createProduct(null, "Café americano", 4500F, "Bebida");
+        productService.createProduct(null, "Capuchino", 7000F, "Bebida");
+        productService.createProduct(null, "Croissant", 5500F, "Alimento");
     }
 }

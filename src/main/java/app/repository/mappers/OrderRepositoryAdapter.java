@@ -13,9 +13,18 @@ public class OrderRepositoryAdapter implements OrderRepositoryPort {
 
     @Override
     public Order save(Order order) {
+        order.setOrderId(nextId());
         // Agrega la orden a la lista y devuelve el objeto guardado.
         orders.add(order);
         return order;
+    }
+
+    private int nextId() {
+        int id = 1;
+        while (selectByOrderId(id) != null) {
+            id++;
+        }
+        return id;
     }
 
     @Override

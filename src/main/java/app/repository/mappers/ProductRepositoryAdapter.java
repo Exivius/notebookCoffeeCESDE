@@ -14,10 +14,19 @@ public class ProductRepositoryAdapter implements ProductRepositoryPort {
 
     @Override
     public Products save(Products product) {
+        product.setProductId(nextId());
         // products es la lista; product es el objeto recibido.
         products.add(product);
         // Devuelve el producto guardado.
         return product;
+    }
+
+    private int nextId() {
+        int id = 1;
+        while (selectById(id) != null) {
+            id++;
+        }
+        return id;
     }
 
     @Override

@@ -15,9 +15,9 @@ public class PlaceServiceAdapter implements PlaceServiceInterface {
     }
 
     @Override
-    public Place createPlace(Integer placeId, String placeName, String placeType) {
+    public Place createPlace(Integer placeId, String placeName) {
         // Construye la sede con los datos recibidos.
-        Place place = new Place(placeId, placeName, placeType);
+        Place place = new Place(null, placeName);
         // Solicita al repositorio guardarla y devuelve el resultado.
         return placeRepositoryPort.save(place);
     }
@@ -35,9 +35,9 @@ public class PlaceServiceAdapter implements PlaceServiceInterface {
     }
 
     @Override
-    public Place updatePlace(Integer placeId, String placeName, String placeType) {
+    public Place updatePlace(Integer placeId, String placeName) {
         // Construye la sede con los nuevos datos y conserva el ID.
-        Place place = new Place(placeId, placeName, placeType);
+        Place place = new Place(placeId, placeName);
         return placeRepositoryPort.updatePlace(place);
     }
 

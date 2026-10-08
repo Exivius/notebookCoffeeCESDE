@@ -16,12 +16,9 @@ public class PlaceView {
 
     public void createPlace() {
         // Solicita los datos por consola usando el validador existente.
-        int id = DataTypeValidator.validateInt("Ingrese el ID de la sede:");
         String name = DataTypeValidator.validateString("Ingrese el nombre de la sede:");
-        String type = DataTypeValidator.validateString("Ingrese el tipo de sede:");
-
-        // Envía los datos al servicio para construir y guardar la sede.
-        placeService.createPlace(id, name, type);
+        Place place = placeService.createPlace(null, name);
+        System.out.println("Sede creada con ID: " + place.getPlaceId());
     }
 
     public void selectPlaceById() {
@@ -33,8 +30,7 @@ public class PlaceView {
             System.out.println("No existe una sede con ese ID.");
             return;
         }
-        System.out.println(place.getPlaceId() + " | " + place.getPlaceName()
-                + " | " + place.getPlaceType());
+        System.out.println(place.getPlaceId() + " | " + place.getPlaceName());
     }
 
     public void selectAllPlaces() {
@@ -45,8 +41,7 @@ public class PlaceView {
             return;
         }
         for (Place place : places) {
-            System.out.println(place.getPlaceId() + " | " + place.getPlaceName()
-                    + " | " + place.getPlaceType());
+            System.out.println(place.getPlaceId() + " | " + place.getPlaceName());
         }
     }
 
@@ -58,9 +53,8 @@ public class PlaceView {
             return;
         }
         String name = DataTypeValidator.validateString("Ingrese el nuevo nombre de la sede:");
-        String type = DataTypeValidator.validateString("Ingrese el nuevo tipo de sede:");
         // Envía los nuevos datos al servicio para reemplazar la sede.
-        Place place = placeService.updatePlace(id, name, type);
+        Place place = placeService.updatePlace(id, name);
         if (place != null) {
             System.out.println("Sede actualizada correctamente.");
         } else {

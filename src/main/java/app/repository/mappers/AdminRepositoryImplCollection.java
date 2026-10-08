@@ -5,6 +5,7 @@ import app.service.outputports.AdminRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class AdminRepositoryImplCollection implements AdminRepository {
 
@@ -12,6 +13,9 @@ public class AdminRepositoryImplCollection implements AdminRepository {
 
     @Override
     public Admin save(Admin admin) {
+        if (selectById(admin.getId()) != null) {
+            return null;
+        }
         admins.add(admin);
         return admin;
     }
@@ -19,7 +23,7 @@ public class AdminRepositoryImplCollection implements AdminRepository {
     @Override
     public Admin selectById(int id) {
         for (Admin admin : admins) {
-            if (admin.getId() != null && admin.getId() == id) {
+            if (Objects.equals(admin.getId(), id)) {
                 return admin;
             }
         }
@@ -51,7 +55,7 @@ public class AdminRepositoryImplCollection implements AdminRepository {
 
     @Override
     public void deleteById(int id) {
-        admins.removeIf(admin -> admin.getId() != null && admin.getId() == id);
+        admins.removeIf(admin -> Objects.equals(admin.getId(), id));
     }
 
     @Override

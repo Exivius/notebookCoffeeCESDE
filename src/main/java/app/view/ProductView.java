@@ -16,12 +16,11 @@ public class ProductView {
 
     public void createProduct() {
         // Pide los datos usando los validadores que ya tiene el proyecto.
-        int id = DataTypeValidator.validateInt("Ingrese el ID del producto:");
         String name = DataTypeValidator.validateString("Ingrese el nombre del producto:");
         Float price = DataTypeValidator.validateFloat("Ingrese el precio del producto:");
         String type = DataTypeValidator.validateString("Ingrese el tipo de producto:");
-        productService.createProduct(id, name, price, type);
-        System.out.println("Producto registrado correctamente.");
+        Products product = productService.createProduct(null, name, price, type);
+        System.out.println("Producto registrado correctamente. ID: " + product.getProductId());
     }
 
     public void selectById() {

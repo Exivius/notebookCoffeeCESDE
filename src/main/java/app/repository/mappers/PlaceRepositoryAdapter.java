@@ -12,9 +12,18 @@ public class PlaceRepositoryAdapter implements PlaceRepositoryPort {
 
     @Override
     public Place save(Place place) {
+        place.setPlaceId(nextId());
         // Agrega la sede a la lista y devuelve el objeto guardado.
         places.add(place);
         return place;
+    }
+
+    private int nextId() {
+        int id = 1;
+        while (selectById(id) != null) {
+            id++;
+        }
+        return id;
     }
 
     @Override
