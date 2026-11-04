@@ -2,6 +2,7 @@ package app.ui;
 
 import app.domain.Admin;
 import app.domain.User;
+import app.persistence.dbConnection.DataBaseConnection;
 import app.service.validators.DataTypeValidator;
 import app.view.AdminView;
 import app.view.PaymentView;
@@ -10,7 +11,11 @@ import app.view.ProductView;
 import app.view.OrderView;
 import app.view.UserView;
 
+import java.sql.Connection;
+
 public class CliUserInterface {
+
+    Connection connection = DataBaseConnection.getInstance().getConnection();
 
     private final AdminView adminView;
     private final PaymentView paymentView;

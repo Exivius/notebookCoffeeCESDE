@@ -1,4 +1,4 @@
-package app.repository.mappers;
+package app.repository;
 
 import app.domain.Payment;
 import app.service.outputports.PaymentRepositoryPort;

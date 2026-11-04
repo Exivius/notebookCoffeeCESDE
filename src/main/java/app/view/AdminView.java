@@ -60,7 +60,11 @@ public class AdminView {
     }
 
     public void selectAdmins(){
-        adminService.selectAdmins();
+        for(var admin : adminService.selectAdmins()){
+            System.out.println(admin.getId() + " | " + admin.getName() + " " + admin.getLastName()
+                    + " | " + admin.getEmail() + " | Rol: " + admin.getRol()
+                    + " | Estado: " + admin.getState());
+        }
     }
 
     public Admin login(String email, String password) {
