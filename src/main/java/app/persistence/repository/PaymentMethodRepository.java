@@ -1,4 +1,4 @@
-package app.repository;
+package app.persistence.repository;
 
 public class PaymentMethodRepository {
     public void create() {}

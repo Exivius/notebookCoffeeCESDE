@@ -1,9 +1,9 @@
 package app.configuration;
 
 import app.persistence.dbConnection.DataBaseConnection;
-import app.repository.*;
-import app.repository.mappers.AdminMapper;
-import app.repository.mappers.RowMapper;
+import app.persistence.repository.*;
+import app.persistence.mappers.AdminMapper;
+import app.persistence.mappers.RowMapper;
 import app.service.AdminServiceImpl;
 import app.service.PaymentServiceAdapter;
 import app.service.inputports.AdminService;
@@ -69,16 +69,16 @@ public class Config {
         UserView userView = new UserView(userService);
         OrderView orderView = new OrderView(orderService, placeService, userService, productService);
 
-        // Entrega las vistas a la interfaz de consola.
+        /*// Entrega las vistas a la interfaz de consola.
         seedData(adminService, userService, placeService, productService);
-        return new CliUserInterface(adminView, paymentView, placeView, productView, orderView, userView);
+
     }
 
     private static void seedData(AdminService adminService, UserServiceInterface userService,
                                  PlaceServiceInterface placeService,
                                  ProductServiceInterface productService) {
-        /*adminService.create(1, "Administrador", "Principal", "admin@coffee.com",
-                "admin123", "Activo");*/
+        adminService.create(1, "Administrador", "Principal", "admin@coffee.com",
+                "admin123", "Activo");
         adminService.create(2, "Administrador", "Ventas", "ventas@coffee.com",
                 "admin123", "Activo");
         userService.createUser(1, "Usuario", "Prueba", "usuario@coffee.com",
@@ -88,5 +88,8 @@ public class Config {
         productService.createProduct(null, "Café americano", 4500F, "Bebida");
         productService.createProduct(null, "Capuchino", 7000F, "Bebida");
         productService.createProduct(null, "Croissant", 5500F, "Alimento");
+    }*/
+        return new CliUserInterface(adminView, paymentView, placeView, productView, orderView, userView);
     }
+
 }

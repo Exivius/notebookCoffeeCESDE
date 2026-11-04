@@ -1,7 +1,7 @@
-package app.repository;
+package app.persistence.repository;
 
 import app.domain.Admin;
-import app.repository.mappers.RowMapper;
+import app.persistence.mappers.RowMapper;
 import app.service.outputports.AdminRepository;
 
 import java.sql.Connection;
@@ -23,8 +23,15 @@ public class AdminRepositoryAdapterDB implements AdminRepository {
 
     @Override
     public Admin save(Admin admin) {
-        // Implement the logic to save the admin in the database
-        return null;
+        String sql = "INSERT INTO person (id, name, last_name, email, phone, password, state, rol, area) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            setAdminParams(ps, admin);
+            ps.executeUpdate();
+            System.out.println("Se ha guardado con éxito");
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al guardar admin" + e.getMessage());
+        }
+        return admin;
     }
 
     @Override
@@ -67,9 +74,10 @@ public class AdminRepositoryAdapterDB implements AdminRepository {
         ps.setString(2, admin.getName());
         ps.setString(3, admin.getLastName());
         ps.setString(4, admin.getEmail());
-        ps.setString(5, admin.getPassword());
-        ps.setString(6, admin.getState());
-        ps.setString(7, admin.getRol());
-        ps.setString(8, admin.getPhone());
+        ps.setString(5, admin.getPhone());
+        ps.setString(6, admin.getPassword());
+        ps.setString(7, admin.getState());
+        ps.setString(8, admin.getRol());
+        ps.setString(9, admin.getArea());
     }
 }

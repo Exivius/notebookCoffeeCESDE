@@ -1,4 +1,4 @@
-package app.repository;
+package app.persistence.repository;
 
 import app.domain.Payment;
 import app.service.outputports.PaymentRepositoryPort;
