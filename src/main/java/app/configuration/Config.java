@@ -1,7 +1,9 @@
 package app.configuration;
 
-import app.repository.mappers.AdminRepositoryImplCollection;
-import app.repository.mappers.PaymentRepositoryAdapter;
+import app.persistence.dbConnection.DataBaseConnection;
+import app.repository.*;
+import app.repository.mappers.AdminMapper;
+import app.repository.mappers.RowMapper;
 import app.service.AdminServiceImpl;
 import app.service.PaymentServiceAdapter;
 import app.service.inputports.AdminService;
@@ -11,31 +13,33 @@ import app.service.outputports.PaymentRepositoryPort;
 import app.ui.CliUserInterface;
 import app.view.AdminView;
 import app.view.PaymentView;
-import app.repository.mappers.PlaceRepositoryAdapter;
 import app.service.PlaceServiceAdapter;
 import app.service.inputports.PlaceServiceInterface;
 import app.service.outputports.PlaceRepositoryPort;
 import app.view.PlaceView;
-import app.repository.mappers.ProductRepositoryAdapter;
 import app.service.ProductServiceAdapter;
 import app.service.inputports.ProductServiceInterface;
 import app.service.outputports.ProductRepositoryPort;
 import app.view.ProductView;
-import app.repository.mappers.OrderRepositoryAdapter;
 import app.service.OrderServiceAdapter;
 import app.service.inputports.OrderServiceInterface;
 import app.service.outputports.OrderRepositoryPort;
 import app.view.OrderView;
 
-import app.repository.mappers.UserRepositoryAdapter;
 import app.service.UserServiceAdapter;
 import app.service.inputports.UserServiceInterface;
 import app.service.outputports.UserRepositoryPort;
 import app.view.UserView;
+
+import java.sql.Connection;
+
 public class Config {
     public static CliUserInterface getCliUserInterface() {
 
-        AdminRepository adminRepository = new AdminRepositoryImplCollection();
+        Connection connection = DataBaseConnection.getInstance().getConnection();
+        RowMapper adminRowMapper = new AdminMapper();
+
+        AdminRepository adminRepository = new AdminRepositoryAdapterDB(connection, adminRowMapper);
         AdminService adminService = new AdminServiceImpl(adminRepository);
         AdminView adminView = new AdminView(adminService);
 
@@ -73,8 +77,8 @@ public class Config {
     private static void seedData(AdminService adminService, UserServiceInterface userService,
                                  PlaceServiceInterface placeService,
                                  ProductServiceInterface productService) {
-        adminService.create(1, "Administrador", "Principal", "admin@coffee.com",
-                "admin123", "Activo");
+        /*adminService.create(1, "Administrador", "Principal", "admin@coffee.com",
+                "admin123", "Activo");*/
         adminService.create(2, "Administrador", "Ventas", "ventas@coffee.com",
                 "admin123", "Activo");
         userService.createUser(1, "Usuario", "Prueba", "usuario@coffee.com",

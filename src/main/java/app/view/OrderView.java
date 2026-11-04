@@ -1,6 +1,7 @@
 package app.view;
 
 import app.domain.Order;
+import app.domain.Item;
 import app.domain.Place;
 import app.domain.User;
 import app.domain.Products;
@@ -76,7 +77,11 @@ public class OrderView {
         int addMore;
         do {
             System.out.println("Productos disponibles:");
-            productService.selectAllProducts();
+            List<Products> availableProducts = productService.selectAllProducts();
+            for (Products product : availableProducts) {
+                System.out.println(product.getProductId() + " | " + product.getProductName()
+                        + " | " + product.getProductPrice() + " | " + product.getProductType());
+            }
             int productId = DataTypeValidator.validateInt("Ingrese el ID del producto:");
             Products product = productService.selectById(productId);
             if (product == null) {
@@ -108,8 +113,8 @@ public class OrderView {
             if (order.getUser() != null && order.getUser().getId().equals(user.getId())) {
                 System.out.println("Orden: " + order.getOrderId()
                         + " | Sede: " + order.getPlace().getPlaceName()
-                        + " | Producto: " + order.getProducts().getProductName()
-                        + " | Precio: " + order.getProducts().getProductPrice());
+                        + " | Productos:");
+                printProducts(order);
                 found = true;
             }
         }
@@ -134,9 +139,9 @@ public class OrderView {
                 "Orden: " + order.getOrderId()
                         + " | Sede: " + order.getPlace().getPlaceName()
                         + " | Usuario: " + order.getUser().getName()
-                        + " | Producto: " + order.getProducts().getProductName()
-                        + " | Precio: " + order.getProducts().getProductPrice()
+                        + " | Productos:"
         );
+        printProducts(order);
     }
 
     public void selectAllOrders() {
@@ -154,9 +159,19 @@ public class OrderView {
                     "Orden: " + order.getOrderId()
                             + " | Sede: " + order.getPlace().getPlaceName()
                             + " | Usuario: " + order.getUser().getName()
-                            + " | Producto: " + order.getProducts().getProductName()
-                            + " | Precio: " + order.getProducts().getProductPrice()
+                            + " | Productos:"
             );
+            printProducts(order);
+        }
+    }
+
+    private void printProducts(Order order) {
+        for (int i = 0; i < order.getShoppingCart().getItems().size(); i++) {
+            Item item = order.getShoppingCart().getItems().get(i);
+            System.out.println("  " + item.getProduct().getProductName()
+                    + " | Cantidad: " + item.getQuantity()
+                    + " | Precio: " + item.getPriceByQuantity()
+                    + " | Total: " + item.getTotal());
         }
     }
 
