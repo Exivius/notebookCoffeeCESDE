@@ -1,13 +1,14 @@
 package app.persistence.repository;
 
 import app.domain.Admin;
-import app.service.outputports.AdminRepository;
+import app.service.outputports.AdminRepositoryPort;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
-public class AdminRepositoryImplCollection implements AdminRepository {
+public class AdminRepositoryPortAdapter implements AdminRepositoryPort {
 
     List<Admin> admins = new ArrayList<>();
 
@@ -21,13 +22,13 @@ public class AdminRepositoryImplCollection implements AdminRepository {
     }
 
     @Override
-    public Admin selectById(int id) {
+    public Optional<Admin> selectById(int id) {
         for (Admin admin : admins) {
             if (Objects.equals(admin.getId(), id)) {
-                return admin;
+                return Optional.of(admin);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override

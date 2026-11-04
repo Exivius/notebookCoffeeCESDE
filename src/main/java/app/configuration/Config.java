@@ -4,11 +4,11 @@ import app.persistence.dbConnection.DataBaseConnection;
 import app.persistence.repository.*;
 import app.persistence.mappers.AdminMapper;
 import app.persistence.mappers.RowMapper;
-import app.service.AdminServiceImpl;
+import app.service.AdminServiceInterfaceAdapter;
 import app.service.PaymentServiceAdapter;
-import app.service.inputports.AdminService;
+import app.service.inputports.AdminServiceInterface;
 import app.service.inputports.PaymentServiceInterface;
-import app.service.outputports.AdminRepository;
+import app.service.outputports.AdminRepositoryPort;
 import app.service.outputports.PaymentRepositoryPort;
 import app.ui.CliUserInterface;
 import app.view.AdminView;
@@ -39,9 +39,9 @@ public class Config {
         Connection connection = DataBaseConnection.getInstance().getConnection();
         RowMapper adminRowMapper = new AdminMapper();
 
-        AdminRepository adminRepository = new AdminRepositoryAdapterDB(connection, adminRowMapper);
-        AdminService adminService = new AdminServiceImpl(adminRepository);
-        AdminView adminView = new AdminView(adminService);
+        AdminRepositoryPort adminRepositoryPort = new AdminRepositoryPortAdapterDB(connection, adminRowMapper);
+        AdminServiceInterface adminServiceInterface = new AdminServiceInterfaceAdapter(adminRepositoryPort);
+        AdminView adminView = new AdminView(adminServiceInterface);
 
         // Crea el repositorio que almacenará las sedes en memoria.
         PlaceRepositoryPort placeRepositoryPort = new PlaceRepositoryAdapter();

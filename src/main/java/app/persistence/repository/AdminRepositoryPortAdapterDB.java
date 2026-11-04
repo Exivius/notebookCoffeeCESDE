@@ -2,7 +2,7 @@ package app.persistence.repository;
 
 import app.domain.Admin;
 import app.persistence.mappers.RowMapper;
-import app.service.outputports.AdminRepository;
+import app.service.outputports.AdminRepositoryPort;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,13 +10,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class AdminRepositoryAdapterDB implements AdminRepository {
+public class AdminRepositoryPortAdapterDB implements AdminRepositoryPort {
 
     private final Connection connection;
     private final RowMapper rowMapper;
 
-    public AdminRepositoryAdapterDB(Connection connection, RowMapper rowMapper) {
+    public AdminRepositoryPortAdapterDB(Connection connection, RowMapper rowMapper) {
         this.connection = connection;
         this.rowMapper = rowMapper;
     }
@@ -35,8 +36,18 @@ public class AdminRepositoryAdapterDB implements AdminRepository {
     }
 
     @Override
-    public Admin selectById(int id) {
-        return null;
+    public Optional<Admin> selectById(int id) {
+        String sql = "SELECT * FROM person WHERE id = ? AND rol = 'Admin'";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return Optional.of((Admin) rowMapper.mapRow(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al consultar el registro " + e.getMessage());
+        }
+        return Optional.empty();
     }
 
     @Override
