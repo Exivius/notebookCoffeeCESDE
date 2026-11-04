@@ -7,28 +7,35 @@ public class Order {
     private Integer orderId;
     private Place place;
     private User user;
-    private List<Products> products = new ArrayList<>();
-    private List<Integer> quantities = new ArrayList<>();
+    private ShoppingCart shoppingCart;
 
-    public Order() {}
+    public Order() {
+        shoppingCart = new ShoppingCart();
+    }
 
     public Order(Integer orderId, Place place, User user, Products product) {
-        this.orderId = orderId;
-        this.place = place;
-        this.user = user;
+        this(orderId, place, user, new ShoppingCart());
         if (product != null) {
-            products.add(product);
-            quantities.add(1);
+            shoppingCart.addItem(new Item(product, 1));
         }
     }
 
     public Order(Integer orderId, Place place, User user, List<Products> products,
                  List<Integer> quantities) {
+        this(orderId, place, user, new ShoppingCart());
+        if (products == null || quantities == null || products.size() != quantities.size()) {
+            throw new IllegalArgumentException("Productos y cantidades deben tener el mismo tamaño.");
+        }
+        for (int i = 0; i < products.size(); i++) {
+            shoppingCart.addItem(new Item(products.get(i), quantities.get(i)));
+        }
+    }
+
+    public Order(Integer orderId, Place place, User user, ShoppingCart shoppingCart) {
         this.orderId = orderId;
         this.place = place;
         this.user = user;
-        this.products = new ArrayList<>(products);
-        this.quantities = new ArrayList<>(quantities);
+        this.shoppingCart = shoppingCart == null ? new ShoppingCart() : shoppingCart;
     }
 
     public Integer getOrderId() { return orderId; }
@@ -39,18 +46,31 @@ public class Order {
     public void setUser(User user) { this.user = user; }
 
     public Products getProducts() {
-        return products.isEmpty() ? null : products.get(0);
+        return shoppingCart.getItems().isEmpty() ? null : shoppingCart.getItems().get(0).getProduct();
     }
 
     public void setProducts(Products product) {
-        products.clear();
-        quantities.clear();
+        shoppingCart.clearCart();
         if (product != null) {
-            products.add(product);
-            quantities.add(1);
+            shoppingCart.addItem(new Item(product, 1));
         }
     }
 
-    public List<Products> getProductList() { return new ArrayList<>(products); }
-    public List<Integer> getQuantities() { return new ArrayList<>(quantities); }
+    public ShoppingCart getShoppingCart() { return shoppingCart; }
+
+    public List<Products> getProductList() {
+        List<Products> products = new ArrayList<>();
+        for (Item item : shoppingCart.getItems()) {
+            products.add(item.getProduct());
+        }
+        return products;
+    }
+
+    public List<Integer> getQuantities() {
+        List<Integer> quantities = new ArrayList<>();
+        for (Item item : shoppingCart.getItems()) {
+            quantities.add(item.getQuantity());
+        }
+        return quantities;
+    }
 }

@@ -1,9 +1,11 @@
 package app.service;
 
 import app.domain.Order;
+import app.domain.Item;
 import app.domain.Place;
 import app.domain.User;
 import app.domain.Products;
+import app.domain.ShoppingCart;
 import app.service.inputports.OrderServiceInterface;
 import app.service.outputports.OrderRepositoryPort;
 
@@ -30,7 +32,14 @@ public class OrderServiceAdapter implements OrderServiceInterface {
     @Override
     public Order createOrder(Integer orderId, Place place, User user, List<Products> products,
                              List<Integer> quantities) {
-        Order order = new Order(orderId, place, user, products, quantities);
+        ShoppingCart shoppingCart = new ShoppingCart();
+        if (products == null || quantities == null || products.size() != quantities.size()) {
+            throw new IllegalArgumentException("Productos y cantidades deben tener el mismo tamaño.");
+        }
+        for (int i = 0; i < products.size(); i++) {
+            shoppingCart.addItem(new Item(products.get(i), quantities.get(i)));
+        }
+        Order order = new Order(orderId, place, user, shoppingCart);
         return orderRepositoryPort.save(order);
     }
 

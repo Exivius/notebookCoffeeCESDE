@@ -1,4 +1,4 @@
-package app.repository.mappers;
+package app.repository;
 
 public class PaymentMethodRepository {
     public void create() {}
