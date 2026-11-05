@@ -4,12 +4,15 @@ import app.persistence.dbConnection.DataBaseConnection;
 import app.repository.*;
 import app.repository.mappers.AdminMapper;
 import app.repository.mappers.RowMapper;
+import app.repository.mappers.PlaceMapper;
+import app.repository.mappers.PaymentMethodMapper;
+import app.repository.mappers.PaymentMapper;
+import app.repository.mappers.UserMapper;
 import app.service.AdminServiceImpl;
 import app.service.PaymentServiceAdapter;
 import app.service.inputports.AdminService;
 import app.service.inputports.PaymentServiceInterface;
 import app.service.outputports.AdminRepository;
-import app.service.outputports.PaymentRepositoryPort;
 import app.ui.CliUserInterface;
 import app.view.AdminView;
 import app.view.PaymentView;
@@ -43,8 +46,8 @@ public class Config {
         AdminService adminService = new AdminServiceImpl(adminRepository);
         AdminView adminView = new AdminView(adminService);
 
-        // Crea el repositorio que almacenará las sedes en memoria.
-        PlaceRepositoryPort placeRepositoryPort = new PlaceRepositoryAdapter();
+        // Las sedes se consultan y guardan en la base de datos compartida.
+        PlaceRepositoryPort placeRepositoryPort = new PlaceRepositoryAdapterDB(connection, new PlaceMapper());
 
         // Conecta el servicio con ese repositorio.
         PlaceServiceInterface placeService = new PlaceServiceAdapter(placeRepositoryPort);
@@ -60,31 +63,25 @@ public class Config {
         // Conecta el repositorio de órdenes con su servicio y su vista.
         OrderRepositoryPort orderRepositoryPort = new OrderRepositoryAdapter();
         OrderServiceInterface orderService = new OrderServiceAdapter(orderRepositoryPort);
-        PaymentRepositoryPort paymentRepositoryPort = new PaymentRepositoryAdapter();
-        PaymentServiceInterface paymentServiceInterface = new PaymentServiceAdapter(paymentRepositoryPort, orderService);
-        PaymentView paymentView = new PaymentView(paymentServiceInterface);
+        app.service.outputports.PaymentMethodRepository methodRepository = new app.repository.PaymentMethodRepository(connection, new PaymentMethodMapper());
+        app.service.inputports.PaymentMethodService methodService = new app.service.PaymentMethodService(methodRepository);
+        app.view.PaymentMethodView methodView = new app.view.PaymentMethodView(methodService);
+        PaymentRepositoryAdapterDB paymentRepository = new PaymentRepositoryAdapterDB(connection, new PaymentMapper());
+        PaymentServiceInterface paymentServiceInterface = new PaymentServiceAdapter(
+                paymentRepository, paymentRepository::findOrderById, methodService);
+        PaymentView paymentView = new PaymentView(paymentServiceInterface, methodService);
         // Comparte el servicio de usuarios con las dos vistas.
-        UserRepositoryPort userRepository = new UserRepositoryAdapter();
+        UserRepositoryPort userRepository = new UserRepositoryAdapterDB(connection, new UserMapper());
         UserServiceInterface userService = new UserServiceAdapter(userRepository);
         UserView userView = new UserView(userService);
         OrderView orderView = new OrderView(orderService, placeService, userService, productService);
 
         // Entrega las vistas a la interfaz de consola.
-        seedData(adminService, userService, placeService, productService);
-        return new CliUserInterface(adminView, paymentView, placeView, productView, orderView, userView);
+        seedProducts(productService);
+        return new CliUserInterface(adminView, paymentView, placeView, productView, orderView, userView, methodView);
     }
 
-    private static void seedData(AdminService adminService, UserServiceInterface userService,
-                                 PlaceServiceInterface placeService,
-                                 ProductServiceInterface productService) {
-        /*adminService.create(1, "Administrador", "Principal", "admin@coffee.com",
-                "admin123", "Activo");*/
-        adminService.create(2, "Administrador", "Ventas", "ventas@coffee.com",
-                "admin123", "Activo");
-        userService.createUser(1, "Usuario", "Prueba", "usuario@coffee.com",
-                "user123", "Activo", "Medellín");
-        userService.createUser(2, "Cliente", "Prueba", "cliente@coffee.com",
-                "user123", "Activo", "Bello");
+    private static void seedProducts(ProductServiceInterface productService) {
         productService.createProduct(null, "Café americano", 4500F, "Bebida");
         productService.createProduct(null, "Capuchino", 7000F, "Bebida");
         productService.createProduct(null, "Croissant", 5500F, "Alimento");

@@ -12,4 +12,5 @@ public interface UserRepositoryPort {
     public void deleteById(int id);
     User create(User user);
     public int countUsers();
+    User authenticate(String email, String password);
 }

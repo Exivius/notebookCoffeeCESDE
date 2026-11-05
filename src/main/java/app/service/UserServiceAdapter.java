@@ -17,8 +17,16 @@ public class UserServiceAdapter implements UserServiceInterface{
 
     @Override
     public User createUser(Integer id, String name, String lastName, String email, String password, String state, String city) {
-        User user = new User(id, name, lastName, email, password, state, city);
+        User user = new User(id, name, lastName, email, password, state, city, true);
         return userRepositoryPort.save(user);
+    }
+
+    @Override
+    public User login(String email, String password) {
+        if (email == null || email.isBlank() || password == null || password.isBlank()) {
+            return null;
+        }
+        return userRepositoryPort.authenticate(email.trim(), password);
     }
 
     @Override
