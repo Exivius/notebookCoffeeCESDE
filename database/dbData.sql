@@ -2,7 +2,7 @@ USE notebook_coffee_cesde;
 
 -- 1. Población de la tabla 'person' (Usuarios y Administradores)
 INSERT INTO person (name, last_name, email, phone, password, state, rol, city, area) VALUES
-('Felipe', 'Correa', 'admin@coffee.com', '3001234567', 'admin123', 'Activo', 'Admin', NULL, 'Administración Cafetería'),
+('Felipe', 'Correa', 'admin@admin.com', '3001234567', 'admin123', 'Activo', 'Admin', NULL, 'Administración Cafetería'),
 ('Valentina', 'Restrepo', 'user1@coffee.com', '3109876543', 'user123', 'Activo', 'User', 'Medellín', NULL),
 ('Alejandro', 'Gómez', 'user2@coffee.com', '3205554433', 'user123', 'Activo', 'User', 'Medellín', NULL),
 ('Camila', 'López', 'user3@coffee.com', '3154443322', 'user123', 'Inactivo', 'User', 'Medellín', NULL);

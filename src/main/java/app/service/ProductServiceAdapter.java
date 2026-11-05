@@ -22,6 +22,11 @@ public class ProductServiceAdapter implements ProductServiceInterface {
     }
 
     @Override
+    public Products createProduct(Integer id, String name, Float price, String type, String description, Integer stock) {
+        return productRepositoryPort.save(new Products(id, name, price, type, description, stock));
+    }
+
+    @Override
     public Products selectById(Integer id) {
         // Devuelve el producto encontrado o null si no existe.
         return productRepositoryPort.selectById(id);
@@ -38,6 +43,11 @@ public class ProductServiceAdapter implements ProductServiceInterface {
         // Construye un objeto con el mismo ID y los nuevos datos.
         Products product = new Products(id, name, price, type);
         return productRepositoryPort.updateProduct(product);
+    }
+
+    @Override
+    public Products updateProduct(Integer id, String name, Float price, String type, String description, Integer stock) {
+        return productRepositoryPort.updateProduct(new Products(id, name, price, type, description, stock));
     }
 
     @Override

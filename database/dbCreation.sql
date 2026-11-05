@@ -45,7 +45,9 @@ CREATE TABLE products (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
     product_name VARCHAR(150) NOT NULL,
     product_price FLOAT NOT NULL,
-    product_type VARCHAR(100) NOT NULL
+    product_type VARCHAR(100) NOT NULL,
+    product_description VARCHAR(500) NOT NULL DEFAULT '',
+    stock INT NULL DEFAULT NULL
 );
 
 -- 6. Tabla Cart_Item
