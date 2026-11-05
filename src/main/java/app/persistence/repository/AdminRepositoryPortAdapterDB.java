@@ -52,7 +52,34 @@ public class AdminRepositoryPortAdapterDB implements AdminRepositoryPort {
 
     @Override
     public Admin update(Admin admin) {
-        return null;
+        String sql = "UPDATE person SET name = ?, last_name = ?, email = ?, phone = ?, "
+                + "password = ?, state = ?, area = ? WHERE id = ? AND rol = 'ADMIN'";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, admin.getName());
+            ps.setString(2, admin.getLastName());
+            ps.setString(3, admin.getEmail());
+            ps.setString(4, admin.getPhone());
+            ps.setString(5, admin.getPassword());
+            ps.setString(6, admin.getState());
+            ps.setString(7, admin.getArea());
+            ps.setInt(8, admin.getId());
+
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Administrador actualizado con éxito.");
+                return admin;
+            }
+
+            System.out.println("No se encontró un administrador con el ID proporcionado.");
+            return null;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(
+                    "Error al actualizar el administrador: " + e.getMessage()
+            );
+        }
     }
 
     @Override
