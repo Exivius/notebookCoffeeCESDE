@@ -25,6 +25,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,7 +39,7 @@ public final class AdminHttpServer {
     private final PaymentServiceInterface payments;
     private final PaymentMethodService methods;
     private final Map<String, Session> sessions = new ConcurrentHashMap<>();
-    private final String allowedOrigin;
+    private final Set<String> allowedOrigins;
     private HttpServer server;
 
     public AdminHttpServer(AdminServiceInterface admins, UserServiceInterface users,
@@ -52,7 +53,8 @@ public final class AdminHttpServer {
         this.orders = orders;
         this.payments = payments;
         this.methods = methods;
-        this.allowedOrigin = allowedOrigin;
+        this.allowedOrigins = java.util.Arrays.stream(allowedOrigin.split(","))
+                .map(String::trim).filter(value -> !value.isEmpty()).collect(java.util.stream.Collectors.toUnmodifiableSet());
     }
 
     public void start(int port) throws IOException {
@@ -268,7 +270,7 @@ public final class AdminHttpServer {
     }
     private void cors(HttpExchange exchange) {
         String origin = exchange.getRequestHeaders().getFirst("Origin");
-        if (origin != null && ("*".equals(allowedOrigin) || allowedOrigin.equals(origin))) {
+        if (origin != null && (allowedOrigins.contains("*") || allowedOrigins.contains(origin))) {
             exchange.getResponseHeaders().set("Access-Control-Allow-Origin", origin);
             exchange.getResponseHeaders().set("Vary", "Origin");
         }

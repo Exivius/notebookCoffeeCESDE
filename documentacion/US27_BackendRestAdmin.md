@@ -4,7 +4,7 @@
 
 ## Inicio
 
-Configura `NOTEBOOK_DB_URL`, `NOTEBOOK_DB_USER` y `NOTEBOOK_DB_PASSWORD` en la ejecución de IntelliJ o en el entorno local. Aplica una vez `database/migrations/20261105_admin_email.sql` y `database/migrations/20261105_product_admin_fields.sql` a una base existente. Ejecuta `scripts/run-api.sh`. La variable opcional `NOTEBOOK_API_PORT` cambia el puerto y `NOTEBOOK_API_ORIGIN` define el origen web permitido (por defecto `http://localhost:8780`).
+Configura `NOTEBOOK_DB_URL`, `NOTEBOOK_DB_USER` y `NOTEBOOK_DB_PASSWORD` en la ejecución de IntelliJ o en el entorno local. Aplica una vez `database/migrations/20261105_admin_email.sql` y `database/migrations/20261105_product_admin_fields.sql` a una base existente. Ejecuta la configuración local `Backend API` desde IntelliJ; esta conserva las variables privadas de la configuración actual y no se versiona. También puedes ejecutar `scripts/run-api.sh` si las variables están exportadas en la terminal. La variable opcional `NOTEBOOK_API_PORT` cambia el puerto y `NOTEBOOK_API_ORIGIN` define los orígenes web permitidos (por defecto `http://localhost:8780` y `http://localhost:63342`).
 
 Rutas: `POST/DELETE /api/session`; `GET/POST/PUT/DELETE` para `/users`, `/admins`, `/places`, `/products` y `/payment-methods`; consultas `GET /orders` y `/payments`; `GET /health`.
 

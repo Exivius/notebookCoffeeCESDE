@@ -53,7 +53,7 @@ public final class ApiApplication {
                 paymentRepository, orders::selectByOrderId, methods);
 
         int port = Integer.parseInt(System.getenv().getOrDefault("NOTEBOOK_API_PORT", "8080"));
-        String origin = System.getenv().getOrDefault("NOTEBOOK_API_ORIGIN", "http://localhost:8780");
+        String origin = System.getenv().getOrDefault("NOTEBOOK_API_ORIGIN", "http://localhost:8780,http://localhost:63342");
         AdminHttpServer server = new AdminHttpServer(admins, users, places, products, orders,
                 payments, methods, origin);
         server.start(port);
