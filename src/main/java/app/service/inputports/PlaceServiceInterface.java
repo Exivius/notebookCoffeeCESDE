@@ -8,6 +8,8 @@ public interface PlaceServiceInterface {
     //Crea una sede con los datos recibidos.
     Place createPlace(Integer placeId, String placeName);
 
+    Place createPlace(Integer placeId, String placeName, String placeType);
+
     // Busca una sede por su ID.
     Place selectPlaceById(Integer id);
 
@@ -16,6 +18,8 @@ public interface PlaceServiceInterface {
 
     // Actualiza el nombre y el tipo de una sede identificada por su ID.
     Place updatePlace(Integer placeId, String placeName);
+
+    Place updatePlace(Integer placeId, String placeName, String placeType);
 
     // Elimina una sede usando su ID.
     void deletePlaceById(Integer id);

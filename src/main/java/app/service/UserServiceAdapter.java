@@ -16,9 +16,21 @@ public class UserServiceAdapter implements UserServiceInterface{
 
 
     @Override
-    public User createUser(Integer id, String name, String lastName, String email, String phone, String password, String state, String rol, String city) {
-        User user = new User(id, name, lastName, email, phone, password, state, rol, city);
+    public User createUser(Integer id, String name, String lastName, String email, String phone,
+                           String password, String state, String rol, String city) {
+        if (!"User".equalsIgnoreCase(rol)) {
+            throw new IllegalArgumentException("El módulo de usuarios solo admite el rol User.");
+        }
+        User user = new User(id, name, lastName, email, phone, password, state, "User", city);
         return userRepositoryPort.save(user);
+    }
+
+    @Override
+    public User login(String email, String password) {
+        if (email == null || email.isBlank() || password == null || password.isBlank()) {
+            return null;
+        }
+        return userRepositoryPort.authenticate(email.trim(), password);
     }
 
     @Override

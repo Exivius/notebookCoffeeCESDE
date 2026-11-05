@@ -2,7 +2,6 @@ package app.ui;
 
 import app.domain.Admin;
 import app.domain.User;
-import app.persistence.dbConnection.DataBaseConnection;
 import app.service.validators.DataTypeValidator;
 import app.view.AdminView;
 import app.view.PaymentView;
@@ -10,12 +9,9 @@ import app.view.PlaceView;
 import app.view.ProductView;
 import app.view.OrderView;
 import app.view.UserView;
-
-import java.sql.Connection;
+import app.view.PaymentMethodView;
 
 public class CliUserInterface {
-
-    Connection connection = DataBaseConnection.getInstance().getConnection();
 
     private final AdminView adminView;
     private final PaymentView paymentView;
@@ -23,15 +19,23 @@ public class CliUserInterface {
     private final ProductView productView;
     private final OrderView orderView;
     private final UserView userView;
+    private final PaymentMethodView paymentMethodView;
 
     public CliUserInterface(AdminView adminView, PaymentView paymentView, PlaceView placeView,
                             ProductView productView, OrderView orderView, UserView userView) {
+        this(adminView, paymentView, placeView, productView, orderView, userView, null);
+    }
+
+    public CliUserInterface(AdminView adminView, PaymentView paymentView, PlaceView placeView,
+                            ProductView productView, OrderView orderView, UserView userView,
+                            PaymentMethodView paymentMethodView) {
         this.adminView = adminView;
         this.paymentView = paymentView;
         this.placeView = placeView;
         this.productView = productView;
         this.orderView = orderView;
         this.userView = userView;
+        this.paymentMethodView = paymentMethodView;
     }
 
     public void applicationInit() {
@@ -39,21 +43,25 @@ public class CliUserInterface {
         do {
             option = DataTypeValidator.validateInt(
                     "\nMENÚ PRINCIPAL\n1. Crear usuario\n2. Crear Admin\n3. Login\n0. Salir");
-            switch (option) {
-                case 1:
-                    userView.createUser();
-                    break;
-                case 2:
-                    adminView.createAdmin();
-                    break;
-                case 3:
-                    login();
-                    break;
-                case 0:
-                    System.out.println("Saliendo de la aplicación.");
-                    break;
-                default:
-                    System.out.println("Seleccione una opción válida.");
+            try {
+                switch (option) {
+                    case 1:
+                        userView.createUser();
+                        break;
+                    case 2:
+                        adminView.createAdmin();
+                        break;
+                    case 3:
+                        login();
+                        break;
+                    case 0:
+                        System.out.println("Saliendo de la aplicación.");
+                        break;
+                    default:
+                        System.out.println("Seleccione una opción válida.");
+                }
+            } catch (RuntimeException e) {
+                System.out.println(e.getMessage());
             }
         } while (option != 0);
     }
@@ -80,7 +88,7 @@ public class CliUserInterface {
             option = DataTypeValidator.validateInt(
                     "\nMENÚ ADMINISTRADOR\n1. Gestionar usuarios\n2. Gestionar admins\n" +
                     "3. Gestionar sedes\n4. Gestionar productos\n5. Gestionar órdenes\n" +
-                    "6. Gestionar pagos\n0. Cerrar sesión");
+                    "6. Gestionar pagos\n7. Gestionar métodos de pago\n0. Cerrar sesión");
             switch (option) {
                 case 1:
                     userMenu();
@@ -100,6 +108,9 @@ public class CliUserInterface {
                 case 6:
                     paymentMenu();
                     break;
+                case 7:
+                    paymentMethodMenu();
+                    break;
                 case 0:
                     break;
                 default:
@@ -113,7 +124,8 @@ public class CliUserInterface {
         do {
             option = DataTypeValidator.validateInt(
                     "\nMENÚ USUARIO\n1. Ver productos\n2. Crear orden\n3. Ver mis órdenes\n" +
-                    "4. Realizar pago\n5. Ver recibo\n6. Modificar mis datos\n0. Cerrar sesión");
+                    "4. Realizar pago\n5. Ver recibo\n"
+                    + "6. Modificar mis datos\n0. Cerrar sesión");
             switch (option) {
                 case 1:
                     productView.selectAllProducts();
@@ -128,7 +140,7 @@ public class CliUserInterface {
                     paymentView.createPayment(user);
                     break;
                 case 5:
-                    paymentView.generateReceipt();
+                    paymentView.generateReceipt(user);
                     break;
                 case 6:
                     userView.update(user.getId());
@@ -183,14 +195,18 @@ public class CliUserInterface {
             option = DataTypeValidator.validateInt(
                     "\nSEDES\n1. Crear\n2. Consultar por ID\n3. Consultar todas\n" +
                     "4. Actualizar\n5. Eliminar\n0. Volver");
-            switch (option) {
-                case 1: placeView.createPlace(); break;
-                case 2: placeView.selectPlaceById(); break;
-                case 3: placeView.selectAllPlaces(); break;
-                case 4: placeView.updatePlace(); break;
-                case 5: placeView.deletePlaceById(); break;
-                case 0: break;
-                default: System.out.println("Seleccione una opción válida.");
+            try {
+                switch (option) {
+                    case 1: placeView.createPlace(); break;
+                    case 2: placeView.selectPlaceById(); break;
+                    case 3: placeView.selectAllPlaces(); break;
+                    case 4: placeView.updatePlace(); break;
+                    case 5: placeView.deletePlaceById(); break;
+                    case 0: break;
+                    default: System.out.println("Seleccione una opción válida.");
+                }
+            } catch (IllegalArgumentException | IllegalStateException e) {
+                System.out.println(e.getMessage());
             }
         } while (option != 0);
     }
@@ -235,14 +251,44 @@ public class CliUserInterface {
         int option;
         do {
             option = DataTypeValidator.validateInt(
-                    "\nPAGOS\n1. Crear pago\n2. Consultar pagos\n3. Ver recibo\n0. Volver");
+                    "\nPAGOS\n1. Crear pago\n2. Consultar pagos\n3. Ver recibo\n" +
+                    "4. Consultar por ID\n5. Actualizar\n6. Eliminar\n0. Volver");
             switch (option) {
                 case 1: paymentView.createPayment(); break;
                 case 2: paymentView.selectAllPayments(); break;
                 case 3: paymentView.generateReceipt(); break;
+                case 4: paymentView.selectPaymentById(); break;
+                case 5: paymentView.updatePayment(); break;
+                case 6: paymentView.deletePayment(); break;
                 case 0: break;
                 default: System.out.println("Seleccione una opción válida.");
             }
         } while (option != 0);
     }
+    private void paymentMethodMenu() {
+        if (paymentMethodView == null) {
+            System.out.println("No se configuró el catálogo de métodos de pago.");
+            return;
+        }
+        int option;
+        do {
+            option = DataTypeValidator.validateInt(
+                    "\nMÉTODOS DE PAGO\n1. Crear\n2. Consultar por ID\n3. Consultar todos\n"
+                    + "4. Actualizar\n5. Eliminar\n0. Volver");
+            try {
+                switch (option) {
+                    case 1: paymentMethodView.create(); break;
+                    case 2: paymentMethodView.selectById(); break;
+                    case 3: paymentMethodView.selectAll(); break;
+                    case 4: paymentMethodView.update(); break;
+                    case 5: paymentMethodView.deleteById(); break;
+                    case 0: break;
+                    default: System.out.println("Seleccione una opción válida.");
+                }
+            } catch (IllegalArgumentException | IllegalStateException e) {
+                System.out.println(e.getMessage());
+            }
+        } while (option != 0);
+    }
+
 }

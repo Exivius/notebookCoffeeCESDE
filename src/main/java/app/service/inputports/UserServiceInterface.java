@@ -10,5 +10,6 @@ public interface UserServiceInterface {
     public User updateUser(User user);
     public void deleteUser(int id);
     public List<User> selectAllUsers();
+    User login(String email, String password);
 
 }
