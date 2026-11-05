@@ -16,8 +16,8 @@ public class AdminServiceInterfaceAdapter implements AdminServiceInterface {
     }
 
     @Override
-    public Admin create(Integer id, String name, String lastName, String email, String phone, String password, String state, String area) {
-        Admin admin = new Admin(id, name, lastName, email, phone, password, state, "ADMIN", area);
+    public Admin create(String name, String lastName, String email, String phone, String password, String state, String area) {
+        Admin admin = new Admin(null, name, lastName, email, phone, password, state, "ADMIN", area);
         return adminRepositoryPort.save(admin);
     }
 

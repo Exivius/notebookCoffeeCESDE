@@ -13,7 +13,6 @@ public class AdminView {
     }
 
     public void createAdmin(){
-        int id = DataTypeValidator.validateInt("Ingrese el ID del administrador: ");
         String name = DataTypeValidator.validateString("Ingrese el nombre del administrador: ");
         String lastName = DataTypeValidator.validateString("Ingrese el apellido del administrador: ");
         String email = DataTypeValidator.validateString("Ingrese el correo del administrador: ");
@@ -21,10 +20,9 @@ public class AdminView {
         String password = DataTypeValidator.validateString("Ingrese la contraseña del administrador: ");
         System.out.println("Ingrese el estado del administrador: ");
         String state = SetAdminState.getAdminState();
-        String rol = "ADMIN";
         String area = DataTypeValidator.validateString("Ingrese el área del administrador: ");
 
-        Admin admin = adminServiceInterface.create(id, name, lastName, email, phone, password, state, area);
+        Admin admin = adminServiceInterface.create(name, lastName, email, phone, password, state, area);
         if (admin == null) {
             System.out.println("Ya existe un administrador con ese ID.");
         }
