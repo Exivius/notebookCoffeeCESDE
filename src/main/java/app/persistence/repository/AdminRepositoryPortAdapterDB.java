@@ -72,7 +72,18 @@ public class AdminRepositoryPortAdapterDB implements AdminRepositoryPort {
 
     @Override
     public void deleteById(int id) {
-
+        String sql = "DELETE FROM person WHERE id = ? AND rol = 'Admin'";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Administrador eliminado con éxito.");
+            } else {
+                System.out.println("No se encontró un administrador con el ID proporcionado.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al eliminar el administrador: " + e.getMessage());
+        }
     }
 
     @Override
