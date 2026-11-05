@@ -34,7 +34,24 @@ public class SetSede {
         return new Place(option, selectedPlace.getSede());
     }
 
-    public static Place getPlace(app.service.inputports.PlaceServiceInterface ignored) {
-        return getPlace();
+    public static Place getPlace(app.service.inputports.PlaceServiceInterface placeService) {
+        java.util.List<Place> places = placeService.selectAllPlaces();
+        if (places.isEmpty()) {
+            System.out.println("No hay sedes registradas.");
+            return null;
+        }
+        System.out.println("Seleccione una sede (0 para volver):");
+        for (Place place : places) {
+            System.out.println(place.getPlaceId() + ". " + place.getPlaceName()
+                    + " | " + place.getPlaceType());
+        }
+        while (true) {
+            int id = DataTypeValidator.validateInt("ID de la sede:");
+            if (id == 0) return null;
+            for (Place place : places) {
+                if (place.getPlaceId().equals(id)) return place;
+            }
+            System.out.println("Seleccione una sede de la lista.");
+        }
     }
 }
