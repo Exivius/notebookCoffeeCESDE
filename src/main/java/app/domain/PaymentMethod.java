@@ -29,18 +29,4 @@ public class PaymentMethod {
         this.methodName = methodName;
     }
 
-    public void createMethod() {
-    }
-
-    public void selectAllMethods() {
-    }
-
-    public void selectMethodtById() {
-    }
-
-    public void deleteMethodById() {
-    }
-
-    public void updateMethod() {
-    }
 }
