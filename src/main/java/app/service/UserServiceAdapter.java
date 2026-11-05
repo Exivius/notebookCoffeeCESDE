@@ -16,8 +16,8 @@ public class UserServiceAdapter implements UserServiceInterface{
 
 
     @Override
-    public User createUser(Integer id, String name, String lastName, String email, String password, String state, String city) {
-        User user = new User(id, name, lastName, email, password, state, city);
+    public User createUser(Integer id, String name, String lastName, String email, String phone, String password, String state, String rol, String city) {
+        User user = new User(id, name, lastName, email, phone, password, state, rol, city);
         return userRepositoryPort.save(user);
     }
 

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AdminServiceInterface {
-    public Admin create(Integer id , String name, String lastName , String email , String password, String state);
+    public Admin create(Integer id , String name, String lastName, String email, String phone, String password, String state, String area);
     public Admin update(Admin admin);
     public List<Admin> selectAdmins();
     public Optional<Admin> selectAdminById(int id);
