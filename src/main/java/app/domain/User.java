@@ -4,6 +4,8 @@ public class User extends Person{
 
     private String City;
 
+    public User(){super();}
+
     public User(String city) {
         City = city;
     }
