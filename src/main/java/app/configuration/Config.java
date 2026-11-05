@@ -1,18 +1,18 @@
 package app.configuration;
 
 import app.persistence.dbConnection.DataBaseConnection;
-import app.repository.*;
-import app.repository.mappers.AdminMapper;
-import app.repository.mappers.RowMapper;
-import app.repository.mappers.PlaceMapper;
-import app.repository.mappers.PaymentMethodMapper;
-import app.repository.mappers.PaymentMapper;
-import app.repository.mappers.UserMapper;
-import app.service.AdminServiceImpl;
+import app.persistence.repository.*;
+import app.persistence.mappers.AdminMapper;
+import app.persistence.mappers.RowMapper;
+import app.persistence.mappers.PlaceMapper;
+import app.persistence.mappers.PaymentMethodMapper;
+import app.persistence.mappers.PaymentMapper;
+import app.persistence.mappers.UserMapper;
+import app.service.AdminServiceInterfaceAdapter;
 import app.service.PaymentServiceAdapter;
-import app.service.inputports.AdminService;
+import app.service.inputports.AdminServiceInterface;
 import app.service.inputports.PaymentServiceInterface;
-import app.service.outputports.AdminRepository;
+import app.service.outputports.AdminRepositoryPort;
 import app.ui.CliUserInterface;
 import app.view.AdminView;
 import app.view.PaymentView;
@@ -40,10 +40,10 @@ public class Config {
     public static CliUserInterface getCliUserInterface() {
 
         Connection connection = DataBaseConnection.getInstance().getConnection();
-        RowMapper adminRowMapper = new AdminMapper();
+        RowMapper<app.domain.Admin> adminRowMapper = new AdminMapper();
 
-        AdminRepository adminRepository = new AdminRepositoryAdapterDB(connection, adminRowMapper);
-        AdminService adminService = new AdminServiceImpl(adminRepository);
+        AdminRepositoryPort adminRepository = new AdminRepositoryPortAdapterDB(connection, adminRowMapper);
+        AdminServiceInterface adminService = new AdminServiceInterfaceAdapter(adminRepository);
         AdminView adminView = new AdminView(adminService);
 
         // Las sedes se consultan y guardan en la base de datos compartida.
@@ -63,7 +63,7 @@ public class Config {
         // Conecta el repositorio de órdenes con su servicio y su vista.
         OrderRepositoryPort orderRepositoryPort = new OrderRepositoryAdapter();
         OrderServiceInterface orderService = new OrderServiceAdapter(orderRepositoryPort);
-        app.service.outputports.PaymentMethodRepository methodRepository = new app.repository.PaymentMethodRepository(connection, new PaymentMethodMapper());
+        app.service.outputports.PaymentMethodRepository methodRepository = new app.persistence.repository.PaymentMethodRepository(connection, new PaymentMethodMapper());
         app.service.inputports.PaymentMethodService methodService = new app.service.PaymentMethodService(methodRepository);
         app.view.PaymentMethodView methodView = new app.view.PaymentMethodView(methodService);
         PaymentRepositoryAdapterDB paymentRepository = new PaymentRepositoryAdapterDB(connection, new PaymentMapper());
@@ -77,13 +77,7 @@ public class Config {
         OrderView orderView = new OrderView(orderService, placeService, userService, productService);
 
         // Entrega las vistas a la interfaz de consola.
-        seedProducts(productService);
         return new CliUserInterface(adminView, paymentView, placeView, productView, orderView, userView, methodView);
     }
 
-    private static void seedProducts(ProductServiceInterface productService) {
-        productService.createProduct(null, "Café americano", 4500F, "Bebida");
-        productService.createProduct(null, "Capuchino", 7000F, "Bebida");
-        productService.createProduct(null, "Croissant", 5500F, "Alimento");
-    }
 }

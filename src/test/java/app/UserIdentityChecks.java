@@ -1,11 +1,11 @@
 package app;
 
 import app.domain.*;
-import app.repository.PaymentRepositoryAdapter;
+import app.persistence.repository.PaymentRepositoryAdapter;
 import app.service.PaymentServiceAdapter;
 import app.service.inputports.PaymentMethodService;
-import app.repository.UserRepositoryAdapterDB;
-import app.repository.mappers.UserMapper;
+import app.persistence.repository.UserRepositoryAdapterDB;
+import app.persistence.mappers.UserMapper;
 import app.service.UserServiceAdapter;
 import app.view.UserView;
 import java.lang.reflect.Proxy;
@@ -40,12 +40,26 @@ public class UserIdentityChecks {
         check(view.login("cliente42@example.test' OR '1'='1", "clave-correcta") == null,
                 "El correo debe tratarse como valor, no como parte del SQL.");
         check(database.authQueries == 6, "El inicio de sesión debe consultar directamente, sin listar todas las personas.");
-        User created = repository.save(new User(2, "Nuevo", "Cliente", "nuevo@example.test",
-                "clave-nueva", "Activo", "Medellín"));
+        User created = repository.save(new User(2, "Nuevo", "Cliente", "nuevo@example.test", "",
+                "clave-nueva", "Activo", "User", "Medellín"));
         check(created.getId() == 42,
                 "Crear usuario debe usar la clave AUTO_INCREMENT, ignorando el ID2 recibido.");
         check("User".equals(database.inserted.get("rol")), "La creación debe persistir el rol User.");
         check(!database.inserted.containsKey("id"), "El INSERT debe dejar que MySQL genere el ID.");
+        String registration = "Prueba\nIntegracion\nregistro@example.test\n3001234567\nclave-registro\nMedellín\n";
+        java.io.InputStream previousInput = System.in;
+        java.io.PrintStream previousOutput = System.out;
+        try {
+            System.setIn(new java.io.ByteArrayInputStream(registration.getBytes(java.nio.charset.StandardCharsets.UTF_8)));
+            System.setOut(new java.io.PrintStream(new java.io.ByteArrayOutputStream()));
+            view.createUser();
+        } finally {
+            System.setIn(previousInput);
+            System.setOut(previousOutput);
+        }
+        check("3001234567".equals(database.inserted.get("phone")),
+                "El teléfono añadido por el compañero debe llegar desde la vista al INSERT");
+        check("User".equals(database.inserted.get("rol")), "El registro de usuario conserva el rol User");
         check(database.statementsClosed == database.statementsOpened,
                 "Cada sentencia JDBC debe cerrarse.");
         check(database.resultsClosed == database.resultsOpened,

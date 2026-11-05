@@ -16,9 +16,10 @@ public class UserView {
         String name = DataTypeValidator.validateString("Ingrese el nombre del usuario: ");
         String lastName = DataTypeValidator.validateString("Ingrese el apellido del usuario: ");
         String email = DataTypeValidator.validateString("Ingrese el correo del usuario: ");
+        String phone = DataTypeValidator.validateString("Ingrese el teléfono: ");
         String password = DataTypeValidator.validateString("Ingrese la contraseña del usuario: ");
         String city = DataTypeValidator.validateString("Ingrese la ciudad del usuario: ");
-        User user = userServiceInterface.createUser(null, name, lastName, email, password, "Activo", city);
+        User user = userServiceInterface.createUser(null, name, lastName, email, phone, password, "Activo", "User", city);
         System.out.println(user == null ? "No se pudo registrar el usuario." : "Usuario registrado correctamente. ID: " + user.getId());
     }
 
@@ -46,11 +47,11 @@ public class UserView {
         String name = DataTypeValidator.validateString("Ingrese el nombre: ");
         String lastName = DataTypeValidator.validateString("Ingrese el apellido: ");
         String email = DataTypeValidator.validateString("Ingrese el correo: ");
+        String phone = DataTypeValidator.validateString("Ingrese el teléfono: ");
         String password = DataTypeValidator.validateString("Ingrese la contraseña: ");
         String city = DataTypeValidator.validateString("Ingrese la ciudad: ");
         String state = SetAdminState.getAdminState();
-        User updatedUser = new User(id, name, lastName, email, password, state, city, true);
-        updatedUser.setPhone(currentUser.getPhone());
+        User updatedUser = new User(id, name, lastName, email, phone, password, state, "User", city);
         User result = userServiceInterface.updateUser(updatedUser);
         System.out.println(result == null ? "No se pudo actualizar el usuario." : "Usuario actualizado correctamente.");
     }
@@ -64,11 +65,11 @@ public class UserView {
         String name = DataTypeValidator.validateString("Ingrese el nombre: ");
         String lastName = DataTypeValidator.validateString("Ingrese el apellido: ");
         String email = DataTypeValidator.validateString("Ingrese el correo: ");
+        String phone = DataTypeValidator.validateString("Ingrese el teléfono: ");
         String password = DataTypeValidator.validateString("Ingrese la contraseña: ");
         String city = DataTypeValidator.validateString("Ingrese la ciudad: ");
-        User updatedUser = new User(id, name, lastName, email, password,
-                currentUser.getState(), city, true);
-        updatedUser.setPhone(currentUser.getPhone());
+        User updatedUser = new User(id, name, lastName, email, phone, password,
+                currentUser.getState(), "User", city);
         if (userServiceInterface.updateUser(updatedUser) == null) {
             System.out.println("No se pudo actualizar el usuario");
         } else {
@@ -92,7 +93,7 @@ public class UserView {
 
     private void print(User user) {
         System.out.println(user.getId() + " | " + user.getName() + " " + user.getLastName()
-                + " | " + user.getEmail() + " | " + user.getCity()
+                + " | " + user.getEmail() + " | Teléfono: " + user.getPhone() + " | " + user.getCity()
                 + " | Rol: " + user.getRol() + " | Estado: " + user.getState());
     }
 }

@@ -1,8 +1,8 @@
 package app;
 
 import app.domain.*;
-import app.repository.PaymentRepositoryAdapter;
-import app.repository.PaymentRepositoryAdapterDB;
+import app.persistence.repository.PaymentRepositoryAdapter;
+import app.persistence.repository.PaymentRepositoryAdapterDB;
 import app.service.PaymentServiceAdapter;
 import app.service.inputports.PaymentMethodService;
 import java.lang.reflect.Proxy;

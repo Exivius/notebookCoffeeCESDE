@@ -4,11 +4,11 @@ import app.domain.Admin;
 import app.domain.Order;
 import app.domain.Payment;
 import app.domain.Products;
-import app.repository.PaymentRepositoryAdapter;
+import app.persistence.repository.PaymentRepositoryAdapter;
 import app.service.PaymentServiceAdapter;
 import app.domain.PaymentMethod;
 import app.domain.User;
-import app.repository.PlaceRepositoryAdapter;
+import app.persistence.repository.PlaceRepositoryAdapter;
 import app.service.PlaceServiceAdapter;
 import app.service.inputports.PaymentServiceInterface;
 import app.service.inputports.PaymentMethodService;
@@ -27,7 +27,7 @@ import java.util.List;
 public class CliChecks {
     public static void main(String[] args) {
         // Dos sesiones: administrador y cliente con el ID persistido, con órdenes propias y ajenas.
-        String input = String.join("\n", "3", "admin", "clave", "7", "1", "Nequi", "3", "0",
+        String input = String.join("\n", "2", "3", "admin", "clave", "7", "1", "Nequi", "3", "0",
                 "3", "1", "Bello", "Punto de Entrega", "0", "6", "4", "999", "0", "0",
                 "3", "cliente", "clave", "4", "11", "7", "1", "5", "2",
                 "4", "12", "7", "1", "5", "1", "0", "0") + "\n";
@@ -49,6 +49,9 @@ public class CliChecks {
         PaymentServiceInterface payments = new PaymentServiceAdapter(repository,
                 id -> id == 11 ? ownOrder : id == 12 ? foreignOrder : null, catalog);
         AdminView admins = new AdminView(null) {
+            @Override public void createAdmin() {
+                throw new RuntimeException("Error al guardar admin: correo duplicado de prueba.");
+            }
             @Override public Admin login(String email, String password) {
                 return email.equals("admin") ? new Admin() : null;
             }
@@ -66,6 +69,8 @@ public class CliChecks {
             System.setOut(previous);
         }
         String text = output.toString(StandardCharsets.UTF_8);
+        check(text.contains("Error al guardar admin: correo duplicado de prueba."),
+                "Un error SQL de Admin debe mostrarse sin terminar la aplicación");
         check(catalog.created != null && catalog.created.getMethodName().equals("Nequi"),
                 "El menú debe conectar el registro con el catálogo");
         check(places.selectAllPlaces().size() == 1, "El menú debe crear la sede");

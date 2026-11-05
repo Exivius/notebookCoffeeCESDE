@@ -1,7 +1,7 @@
 package app;
 
 import app.domain.Place;
-import app.repository.PlaceRepositoryAdapter;
+import app.persistence.repository.PlaceRepositoryAdapter;
 import app.service.PlaceServiceAdapter;
 
 public class PlaceChecks {

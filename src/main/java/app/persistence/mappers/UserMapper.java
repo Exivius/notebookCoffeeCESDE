@@ -1,4 +1,4 @@
-package app.repository.mappers;
+package app.persistence.mappers;
 
 import app.domain.User;
 
@@ -18,6 +18,7 @@ public class UserMapper implements RowMapper<User> {
         user.setState(rs.getString("state"));
         user.setRol(rs.getString("rol"));
         user.setCity(rs.getString("city"));
+
         return user;
     }
 }

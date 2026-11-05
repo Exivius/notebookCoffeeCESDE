@@ -1,10 +1,10 @@
-package app.repository;
+package app.persistence.repository;
 
 import app.domain.Item;
 import app.domain.Order;
 import app.domain.Payment;
-import app.repository.mappers.PaymentMapper;
-import app.repository.mappers.RowMapper;
+import app.persistence.mappers.PaymentMapper;
+import app.persistence.mappers.RowMapper;
 import app.domain.Place;
 import app.domain.Products;
 import app.domain.ShoppingCart;

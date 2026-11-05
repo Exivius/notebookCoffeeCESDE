@@ -4,19 +4,20 @@ public class User extends Person{
 
     private String City;
 
-    public User(){ super();}
+    public User(){super();}
 
-    public User(Integer id, String name, String lastName, String email, String password, String state, String city) {
-        super(id, name, lastName, email, password, "Activo");
+    public User(String city) {
         City = city;
-        setRol("USUARIO");
     }
 
-    public User(Integer id, String name, String lastName, String email, String password,
-                String state, String city, boolean preserveState) {
-        super(id, name, lastName, email, password, preserveState ? state : "Activo");
+    public User(int id, String city) {
+        super(id);
         City = city;
-        setRol("USUARIO");
+    }
+
+    public User(Integer id, String name, String lastName, String email, String phone, String password, String state, String rol, String city) {
+        super(id, name, lastName, email, phone, password, state, rol);
+        City = city;
     }
 
     public String getCity() {

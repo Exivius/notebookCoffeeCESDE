@@ -1,4 +1,4 @@
-package app.repository.mappers;
+package app.persistence.mappers;
 
 import app.domain.Admin;
 
@@ -17,6 +17,7 @@ public class AdminMapper implements RowMapper<Admin> {
         admin.setPassword(rs.getString("password"));
         admin.setState(rs.getString("state"));
         admin.setRol(rs.getString("rol"));
+        admin.setArea(rs.getString("area"));
 
         return admin;
     }

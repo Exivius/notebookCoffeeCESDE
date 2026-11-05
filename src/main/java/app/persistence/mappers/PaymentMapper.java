@@ -1,4 +1,4 @@
-package app.repository.mappers;
+package app.persistence.mappers;
 
 import app.domain.Order;
 import app.domain.Payment;

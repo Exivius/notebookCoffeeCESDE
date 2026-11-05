@@ -1,8 +1,8 @@
-package app.repository;
+package app.persistence.repository;
 
 import app.domain.User;
-import app.repository.mappers.RowMapper;
-import app.repository.mappers.UserMapper;
+import app.persistence.mappers.RowMapper;
+import app.persistence.mappers.UserMapper;
 import app.service.outputports.UserRepositoryPort;
 
 import java.sql.Connection;

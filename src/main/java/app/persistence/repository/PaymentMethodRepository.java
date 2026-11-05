@@ -1,8 +1,8 @@
-package app.repository;
+package app.persistence.repository;
 
 import app.domain.PaymentMethod;
-import app.repository.mappers.PaymentMethodMapper;
-import app.repository.mappers.RowMapper;
+import app.persistence.mappers.PaymentMethodMapper;
+import app.persistence.mappers.RowMapper;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

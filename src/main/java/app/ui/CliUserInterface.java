@@ -60,7 +60,7 @@ public class CliUserInterface {
                     default:
                         System.out.println("Seleccione una opción válida.");
                 }
-            } catch (IllegalArgumentException | IllegalStateException e) {
+            } catch (RuntimeException e) {
                 System.out.println(e.getMessage());
             }
         } while (option != 0);

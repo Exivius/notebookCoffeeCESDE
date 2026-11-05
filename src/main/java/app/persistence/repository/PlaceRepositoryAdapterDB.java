@@ -1,8 +1,8 @@
-package app.repository;
+package app.persistence.repository;
 
 import app.domain.Place;
-import app.repository.mappers.PlaceMapper;
-import app.repository.mappers.RowMapper;
+import app.persistence.mappers.PlaceMapper;
+import app.persistence.mappers.RowMapper;
 import app.service.outputports.PlaceRepositoryPort;
 
 import java.sql.Connection;
