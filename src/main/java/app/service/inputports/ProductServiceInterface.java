@@ -6,6 +6,7 @@ import java.util.List;
 public interface ProductServiceInterface {
     // Crea un producto con los datos recibidos.
     Products createProduct(Integer id, String name, Float price, String type);
+    Products createProduct(Integer id, String name, Float price, String type, String description, Integer stock);
 
     // Busca un producto por su ID.
     Products selectById(Integer id);
@@ -15,6 +16,7 @@ public interface ProductServiceInterface {
 
     // Actualiza los datos del producto identificado por su ID.
     Products updateProduct(Integer id, String name, Float price, String type);
+    Products updateProduct(Integer id, String name, Float price, String type, String description, Integer stock);
 
     // Elimina un producto por su ID.
     void deleteById(Integer id);
