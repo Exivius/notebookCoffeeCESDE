@@ -99,6 +99,6 @@ public class ProductView {
             return;
         }
         productService.deleteById(id);
-        System.out.println("Producto eliminado correctamente.");
+        //System.out.println("Producto eliminado correctamente.");
     }
 }

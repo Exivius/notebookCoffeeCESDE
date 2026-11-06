@@ -69,7 +69,18 @@ public class ProductRepositoryAdapterDB implements ProductRepositoryPort {
 
     @Override
     public void deleteById(Integer id) {
-
+        String sql = "DELETE FROM products WHERE product_id = ?";
+        try(PreparedStatement ps = connection.prepareStatement(sql)){
+            ps.setInt(1, id);
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 0) {
+                System.out.println("No se encontró un producto con ese ID.");
+            } else {
+                System.out.println("Producto eliminado con éxito.");
+            }
+        } catch (SQLException e){
+            throw new RuntimeException("Error al eliminar el producto: " + e.getMessage());
+        }
     }
 
     private void setProductParams(java.sql.PreparedStatement ps, Products product) throws java.sql.SQLException {
