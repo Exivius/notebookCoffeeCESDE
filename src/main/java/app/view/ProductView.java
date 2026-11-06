@@ -42,10 +42,22 @@ public class ProductView {
             System.out.println("No hay productos registrados.");
             return;
         }
+        System.out.println();
+        System.out.println("=============================== LISTA DE PRODUCTOS ==============================");
+        System.out.printf(
+                "%-5s | %-20s | %-10s | %-15s%n",
+                "ID", "NOMBRE", "PRECIO", "TIPO"
+        );
+        System.out.println("-------------------------------------------------------------------------------");
         // Muestra cada producto de la lista.
         for (Products product : products) {
-            System.out.println(product.getProductId() + " | " + product.getProductName()
-                    + " | " + product.getProductPrice() + " | " + product.getProductType());
+            System.out.printf(
+                    "%-5d | %-20s | %-10.2f | %-15s%n",
+                    product.getProductId(),
+                    product.getProductName(),
+                    product.getProductPrice(),
+                    product.getProductType()
+            );
         }
     }
 

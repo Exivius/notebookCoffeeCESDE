@@ -4,10 +4,8 @@ import app.domain.Products;
 import app.persistence.mappers.RowMapper;
 import app.service.outputports.ProductRepositoryPort;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLDataException;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductRepositoryAdapterDB implements ProductRepositoryPort {
@@ -39,7 +37,18 @@ public class ProductRepositoryAdapterDB implements ProductRepositoryPort {
 
     @Override
     public List<Products> selectAllProducts() {
-        return List.of();
+        List<Products> products = new ArrayList<>();
+        String sql = "SELECT * FROM products";
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                products.add(rowMapper.mapRow(rs));
+
+            }
+        } catch (SQLException e){
+            throw new RuntimeException("Error al consultar los productos: " + e.getMessage());
+        }
+        return products;
     }
 
     @Override
