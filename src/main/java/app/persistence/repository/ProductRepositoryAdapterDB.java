@@ -5,6 +5,9 @@ import app.persistence.mappers.RowMapper;
 import app.service.outputports.ProductRepositoryPort;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLDataException;
+import java.sql.SQLException;
 import java.util.List;
 
 public class ProductRepositoryAdapterDB implements ProductRepositoryPort {
@@ -18,6 +21,14 @@ public class ProductRepositoryAdapterDB implements ProductRepositoryPort {
 
     @Override
     public Products save(Products products) {
+        String sql = "INSERT INTO products (product_name, product_price, product_type) VALUES (?, ?, ?)";
+        try(PreparedStatement ps = connection.prepareStatement(sql)){
+            setProductParams(ps, products);
+            ps.executeUpdate();
+            System.out.println("Se ha guardado con éxito");
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al guardar el producto: " + e.getMessage());
+        }
         return null;
     }
 

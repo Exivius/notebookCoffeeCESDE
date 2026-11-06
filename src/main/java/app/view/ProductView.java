@@ -20,7 +20,7 @@ public class ProductView {
         Float price = DataTypeValidator.validateFloat("Ingrese el precio del producto:");
         String type = DataTypeValidator.validateString("Ingrese el tipo de producto:");
         Products product = productService.createProduct(null, name, price, type);
-        System.out.println("Producto registrado correctamente. ID: " + product.getProductId());
+        //System.out.println("Producto registrado correctamente. ID: " + product.getProductId());
     }
 
     public void selectById() {
