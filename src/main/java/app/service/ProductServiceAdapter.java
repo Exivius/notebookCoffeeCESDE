@@ -35,9 +35,8 @@ public class ProductServiceAdapter implements ProductServiceInterface {
     }
 
     @Override
-    public Products updateProduct(Integer id, String name, Float price, String type) {
+    public Products updateProduct(Products product) {
         // Construye un objeto con el mismo ID y los nuevos datos.
-        Products product = new Products(id, name, price, type);
         return productRepositoryPort.updateProduct(product);
     }
 

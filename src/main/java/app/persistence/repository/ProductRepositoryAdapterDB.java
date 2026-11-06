@@ -64,6 +64,17 @@ public class ProductRepositoryAdapterDB implements ProductRepositoryPort {
 
     @Override
     public Products updateProduct(Products product) {
+        String sql = "UPDATE products SET product_name = ?, product_price = ?, product_type = ? WHERE product_id = ?";
+        try(PreparedStatement ps = connection.prepareStatement(sql)){
+            setProductParams(ps, product);
+            ps.setInt(4, product.getProductId());
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 0) {
+                System.out.println("No se encontró un producto con ese ID.");
+            }
+        } catch (SQLException e){
+            throw new RuntimeException("Error al actualizar el producto: " + e.getMessage());
+        }
         return null;
     }
 

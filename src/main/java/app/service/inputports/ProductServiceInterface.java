@@ -15,7 +15,7 @@ public interface ProductServiceInterface {
     List<Products> selectAllProducts();
 
     // Actualiza los datos del producto identificado por su ID.
-    Products updateProduct(Integer id, String name, Float price, String type);
+    Products updateProduct(Products product);
 
     // Elimina un producto por su ID.
     void deleteById(Integer id);
