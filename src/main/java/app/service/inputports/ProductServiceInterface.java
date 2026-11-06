@@ -2,13 +2,14 @@ package app.service.inputports;
 
 import app.domain.Products;
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductServiceInterface {
     // Crea un producto con los datos recibidos.
     Products createProduct(Integer id, String name, Float price, String type);
 
     // Busca un producto por su ID.
-    Products selectById(Integer id);
+    Optional<Products> selectById(Integer id);
 
     // Consulta todos los productos guardados.
     List<Products> selectAllProducts();

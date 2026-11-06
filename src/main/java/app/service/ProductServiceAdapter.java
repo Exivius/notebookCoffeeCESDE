@@ -4,6 +4,7 @@ import app.domain.Products;
 import app.service.inputports.ProductServiceInterface;
 import app.service.outputports.ProductRepositoryPort;
 import java.util.List;
+import java.util.Optional;
 
 public class ProductServiceAdapter implements ProductServiceInterface {
     // Referencia al repositorio que almacena los productos.
@@ -22,7 +23,7 @@ public class ProductServiceAdapter implements ProductServiceInterface {
     }
 
     @Override
-    public Products selectById(Integer id) {
+    public Optional<Products> selectById(Integer id) {
         // Devuelve el producto encontrado o null si no existe.
         return productRepositoryPort.selectById(id);
     }

@@ -14,6 +14,7 @@ import app.service.helpers.SetSede;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class OrderView {
 
@@ -40,7 +41,7 @@ public class OrderView {
         createOrderWithProducts(place, user);
     }
 
-    public void updateOrder() {
+    /*public void updateOrder() {
         // Busca las nuevas relaciones entre objetos registrados.
         int placeId = DataTypeValidator.validateInt("Ingrese el nuevo ID de sede:");
         int userId = DataTypeValidator.validateInt("Ingrese el nuevo ID de usuario:");
@@ -49,7 +50,7 @@ public class OrderView {
         User user = userService.selectUserById(userId);
         Products product = productService.selectById(productId);
         updateOrder(place, user, product);
-    }
+    }*/
 
     public void createOrder(Place place, User user, Products products) {
         // Comprueba que se hayan seleccionado los datos de la orden.
@@ -83,7 +84,7 @@ public class OrderView {
                         + " | " + product.getProductPrice() + " | " + product.getProductType());
             }
             int productId = DataTypeValidator.validateInt("Ingrese el ID del producto:");
-            Products product = productService.selectById(productId);
+            Optional<Products> product = productService.selectById(productId);
             if (product == null) {
                 System.out.println("No existe ese producto.");
                 addMore = 1;
@@ -95,7 +96,7 @@ public class OrderView {
                 addMore = 1;
                 continue;
             }
-            products.add(product);
+            products.add(product.get());
             quantities.add(quantity);
             addMore = DataTypeValidator.validateInt("¿Desea agregar otro producto? 1. Sí 0. No");
         } while (addMore == 1);

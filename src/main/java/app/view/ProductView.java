@@ -26,13 +26,25 @@ public class ProductView {
     public void selectById() {
         // Busca el producto antes de mostrar sus datos.
         int id = DataTypeValidator.validateInt("Ingrese el ID del producto a consultar:");
-        Products product = productService.selectById(id);
+        Products product = productService.selectById(id).orElse(null);
         if (product == null) {
             System.out.println("No existe un producto con ese ID.");
             return;
         }
-        System.out.println(product.getProductId() + " | " + product.getProductName()
-                + " | " + product.getProductPrice() + " | " + product.getProductType());
+        System.out.println();
+        System.out.println("=============================== DATOS DEL PRODUCTO ==============================");
+        System.out.printf(
+                "%-5s | %-20s | %-10s | %-15s%n",
+                "ID", "NOMBRE", "PRECIO", "TIPO"
+        );
+        System.out.println("-------------------------------------------------------------------------------");
+        System.out.printf(
+                "%-5d | %-20s | %-10.2f | %-15s%n",
+                product.getProductId(),
+                product.getProductName(),
+                product.getProductPrice(),
+                product.getProductType());
+        System.out.println("-------------------------------------------------------------------------------");
     }
 
     public void selectAllProducts() {
