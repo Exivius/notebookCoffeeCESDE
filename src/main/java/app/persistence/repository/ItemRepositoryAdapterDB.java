@@ -5,6 +5,7 @@ import app.persistence.mappers.RowMapper;
 import app.service.outputports.ItemRepositoryPort;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ItemRepositoryAdapterDB implements ItemRepositoryPort {
@@ -54,7 +55,17 @@ public class ItemRepositoryAdapterDB implements ItemRepositoryPort {
 
     @Override
     public List<Item> selectByCartId(Integer cartId) {
-        return List.of();
+        List<Item> items = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(
+                selectSql() + " WHERE ci.cart_id = ? ORDER BY ci.item_id")) {
+            ps.setInt(1, cartId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) items.add(rowMapper.mapRow(rs));
+            }
+            return items;
+        } catch (SQLException e){
+            throw new RuntimeException("Error al consultar el item", e);
+        }
     }
 
     @Override

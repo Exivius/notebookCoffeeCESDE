@@ -31,7 +31,8 @@ public class ItemServiceAdapter implements ItemServiceInterface {
 
     @Override
     public List<Item> selectByCartId(Integer cartId) {
-        return List.of();
+        validateId(cartId, "carrito");
+        return itemRepositoryPort.selectByCartId(cartId);
     }
 
     @Override
