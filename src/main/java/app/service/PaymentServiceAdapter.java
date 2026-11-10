@@ -32,6 +32,7 @@ public class PaymentServiceAdapter implements PaymentServiceInterface {
     @Override
     public Payment createPayment(Integer userId, Integer orderId, String paymentType, Integer methodId) {
         Order order = findOrder(orderId, userId);
+        rejectPaidOrder(orderId);
         PaymentMethod method = findMethod(methodId);
         Payment payment = new Payment(null, method, order);
         payment.setPaymentType(validateType(paymentType));
@@ -44,6 +45,7 @@ public class PaymentServiceAdapter implements PaymentServiceInterface {
     public Payment createPayment(Integer id, Integer userId, Integer orderId, Double amount,
                                  String paymentMethod, String paymentStatus, String paymentDate) {
         Order order = findOrder(orderId, userId);
+        rejectPaidOrder(orderId);
         PaymentMethod method;
         if (methodService == null) {
             if (paymentMethod == null || paymentMethod.isBlank()) {
@@ -96,7 +98,13 @@ public class PaymentServiceAdapter implements PaymentServiceInterface {
         if (payment.getOrder() == null || payment.getPaymentMethod() == null) {
             throw new IllegalArgumentException("Debe indicar la orden y el método de pago.");
         }
+        Payment current = selectPaymentById(payment.getPaymentId());
+        Integer currentOrderId = current.getOrder() == null ? null : current.getOrder().getOrderId();
         Order order = findOrder(payment.getOrder().getOrderId(), null);
+        if (!Objects.equals(currentOrderId, order.getOrderId())
+                && paymentRepositoryPort.existsByOrderId(order.getOrderId())) {
+            throw new IllegalArgumentException("La orden ya tiene un pago registrado.");
+        }
         if (methodService != null) {
             payment.setPaymentMethod(findMethod(payment.getPaymentMethod().getMethodId()));
         }
@@ -165,6 +173,13 @@ public class PaymentServiceAdapter implements PaymentServiceInterface {
         payment.setOrder(order);
         payment.setUserId(order.getUser().getId());
         payment.setAmount(total);
+    }
+
+    //Verifica que la orden no tenga un pago registrado antes de crear o actualizar un pago.
+    private void rejectPaidOrder(Integer orderId) {
+        if (paymentRepositoryPort.existsByOrderId(orderId)) {
+            throw new IllegalArgumentException("La orden ya tiene un pago registrado.");
+        }
     }
 
     private String validateType(String type) {

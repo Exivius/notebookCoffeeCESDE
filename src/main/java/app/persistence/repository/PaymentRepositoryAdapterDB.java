@@ -89,6 +89,21 @@ public class PaymentRepositoryAdapterDB implements PaymentRepositoryPort {
         return payment;
     }
 
+
+    //Valida que el pago exista para la orden, ya que no se permite más de un pago por orden.
+    @Override
+    public boolean existsByOrderId(int orderId) {
+        String sql = "SELECT 1 FROM payment WHERE order_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            throw databaseError("verificar el pago de la orden", e);
+        }
+    }
+
     @Override
     public Payment update(Payment payment) {
         String sql = "UPDATE payment SET payment_type = ?, order_id = ?, method_id = ? WHERE payment_id = ?";

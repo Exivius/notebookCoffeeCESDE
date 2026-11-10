@@ -72,6 +72,7 @@ CREATE TABLE payment (
     payment_type VARCHAR(100) NOT NULL,
     order_id INT NOT NULL,
     method_id INT NOT NULL,
+    UNIQUE KEY uk_payment_order (order_id),
     FOREIGN KEY (order_id) REFERENCES `order`(order_id),
     FOREIGN KEY (method_id) REFERENCES payment_methods(method_id)
 );

@@ -44,6 +44,18 @@ public class PaymentRepositoryAdapter implements PaymentRepositoryPort {
     }
 
     @Override
+    public boolean existsByOrderId(int orderId) {
+        for (Payment payment : payments) {
+            if (payment.getOrder() != null
+                    && payment.getOrder().getOrderId() != null
+                    && payment.getOrder().getOrderId().equals(orderId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public void deleteById(int id) {
         payments.removeIf(payment -> payment.getPaymentId() != null && payment.getPaymentId().equals(id));
     }
