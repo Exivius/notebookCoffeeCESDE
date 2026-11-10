@@ -88,7 +88,16 @@ public class ItemRepositoryAdapterDB implements ItemRepositoryPort {
 
     @Override
     public void deleteById(Integer itemId) {
-
+        try (PreparedStatement ps = connection.prepareStatement(
+                "DELETE FROM cart_item WHERE item_id = ?")) {
+            ps.setInt(1, itemId);
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new RuntimeException("No se encontró el item con ID: " + itemId);
+            }
+        } catch (SQLException e) {
+            throw databaseError("eliminar el item", e);
+        }
     }
 
     private void SetItemParams(PreparedStatement ps, Item item) throws SQLException {

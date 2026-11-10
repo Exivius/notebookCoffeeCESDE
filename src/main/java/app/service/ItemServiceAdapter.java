@@ -45,7 +45,8 @@ public class ItemServiceAdapter implements ItemServiceInterface {
 
     @Override
     public void deleteById(Integer itemId) {
-
+        validateId(itemId, "item");
+        itemRepositoryPort.deleteById(itemId);
     }
 
     //Metodo auxiliar para validar que el ID sea mayor a cero
