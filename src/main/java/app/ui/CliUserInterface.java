@@ -239,7 +239,7 @@ public class CliUserInterface {
                 case 1: orderView.createOrder(); break;
                 case 2: orderView.selectByOrderId(); break;
                 case 3: orderView.selectAllOrders(); break;
-                //case 4: orderView.updateOrder(); break;
+                case 4: orderView.updateOrder(); break;
                 case 5: orderView.deleteById(); break;
                 case 0: break;
                 default: System.out.println("Seleccione una opción válida.");

@@ -41,16 +41,16 @@ public class OrderView {
         createOrderWithProducts(place, user);
     }
 
-    /*public void updateOrder() {
+    public void updateOrder() {
         // Busca las nuevas relaciones entre objetos registrados.
         int placeId = DataTypeValidator.validateInt("Ingrese el nuevo ID de sede:");
         int userId = DataTypeValidator.validateInt("Ingrese el nuevo ID de usuario:");
         int productId = DataTypeValidator.validateInt("Ingrese el nuevo ID de producto:");
         Place place = placeService.selectPlaceById(placeId);
         User user = userService.selectUserById(userId);
-        Products product = productService.selectById(productId);
-        updateOrder(place, user, product);
-    }*/
+        Optional<Products> product = productService.selectById(productId);
+        updateOrder(place, user, product.orElse(null));
+    }
 
     public void createOrder(Place place, User user, Products products) {
         // Comprueba que se hayan seleccionado los datos de la orden.

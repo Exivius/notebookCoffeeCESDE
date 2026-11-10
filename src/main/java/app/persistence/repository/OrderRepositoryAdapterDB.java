@@ -88,7 +88,24 @@ public class OrderRepositoryAdapterDB implements OrderRepositoryPort {
 
     @Override
     public Order updateOrder(Order order) {
-        return null;
+        requireOrder(order);
+        if (order.getOrderId() == null || order.getOrderId() < 1) {
+            throw new IllegalArgumentException("El ID de la orden debe ser mayor que cero.");
+        }
+        String sql = "UPDATE `order` SET place_id = ?, user_id = ?, cart_id = ? WHERE order_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            setId(ps, 1, order.getPlace() == null ? null : order.getPlace().getPlaceId());
+            setId(ps, 2, order.getUser() == null ? null : order.getUser().getId());
+            setId(ps, 3, order.getShoppingCart() == null ? null : order.getShoppingCart().getCartId());
+            ps.setInt(4, order.getOrderId());
+            int updated = ps.executeUpdate();
+            if (updated > 0) {
+                return order;
+            }
+            return selectByOrderId(order.getOrderId()) == null ? null : order;
+        } catch (SQLException e) {
+            throw databaseError("actualizar la orden", e);
+        }
     }
 
     @Override
