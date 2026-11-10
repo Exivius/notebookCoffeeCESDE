@@ -110,6 +110,39 @@ public class OrderRepositoryAdapterDB implements OrderRepositoryPort {
 
     @Override
     public void deleteById(Integer Id) {
+        if (Id == null || Id < 1) {
+            throw new IllegalArgumentException("El ID de la orden debe ser mayor que cero.");
+        }
+        Integer cartId = null;
+        try (PreparedStatement find = connection.prepareStatement(
+                "SELECT cart_id FROM `order` WHERE order_id = ?")) {
+            find.setInt(1, Id);
+            try (ResultSet rs = find.executeQuery()) {
+                if (rs.next() && rs.getObject("cart_id") != null) {
+                    cartId = rs.getInt("cart_id");
+                }
+            }
+            try (PreparedStatement delete = connection.prepareStatement(
+                    "DELETE FROM `order` WHERE order_id = ?")) {
+                delete.setInt(1, Id);
+                delete.executeUpdate();
+            }
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1451) {
+                throw new IllegalStateException(
+                        "No se puede eliminar una orden con pagos asociados.", e);
+            }
+            throw databaseError("eliminar la orden", e);
+        }
+        if (cartId != null) {
+            try (PreparedStatement deleteCart = connection.prepareStatement(
+                    "DELETE FROM shopping_cart WHERE cart_id = ?")) {
+                deleteCart.setInt(1, cartId);
+                deleteCart.executeUpdate();
+            } catch (SQLException e) {
+                throw databaseError("eliminar el carrito de la orden", e);
+            }
+        }
         try (PreparedStatement ps = connection.prepareStatement("DELETE FROM `order` WHERE order_id = ?")) {
             ps.setInt(1, Id);
             ps.executeUpdate();

@@ -214,4 +214,20 @@ public class OrderView {
         orderService.deleteById(id);
         System.out.println("Orden eliminada correctamente.");
     }
+
+    public void deleteById(User user) {
+        if (user == null || user.getId() == null) {
+            System.out.println("No se pudo identificar al usuario autenticado.");
+            return;
+        }
+        int id = DataTypeValidator.validateInt("Ingrese el ID de la orden a eliminar:");
+        Order order = orderService.selectByOrderId(id);
+        if (order == null || order.getUser() == null
+                || !user.getId().equals(order.getUser().getId())) {
+            System.out.println("No existe una orden con ese ID para este usuario.");
+            return;
+        }
+        orderService.deleteById(id);
+        System.out.println("Orden eliminada correctamente.");
+    }
 }

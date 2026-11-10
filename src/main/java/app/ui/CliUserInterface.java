@@ -125,30 +125,37 @@ public class CliUserInterface {
             option = DataTypeValidator.validateInt(
                     "\nMENÚ USUARIO\n1. Ver productos\n2. Crear orden\n3. Ver mis órdenes\n" +
                     "4. Realizar pago\n5. Ver recibo\n"
-                    + "6. Modificar mis datos\n0. Cerrar sesión");
-            switch (option) {
-                case 1:
-                    productView.selectAllProducts();
-                    break;
-                case 2:
-                    orderView.createOrderForUser(user);
-                    break;
-                case 3:
-                    orderView.selectOrdersByUser(user);
-                    break;
-                case 4:
-                    paymentView.createPayment(user);
-                    break;
-                case 5:
-                    paymentView.generateReceipt(user);
-                    break;
-                case 6:
-                    userView.update(user.getId());
-                    break;
-                case 0:
-                    break;
-                default:
-                    System.out.println("Seleccione una opción válida.");
+                    + "6. Modificar mis datos\n7. Eliminar una orden\n0. Cerrar sesión");
+            try {
+                switch (option) {
+                    case 1:
+                        productView.selectAllProducts();
+                        break;
+                    case 2:
+                        orderView.createOrderForUser(user);
+                        break;
+                    case 3:
+                        orderView.selectOrdersByUser(user);
+                        break;
+                    case 4:
+                        paymentView.createPayment(user);
+                        break;
+                    case 5:
+                        paymentView.generateReceipt(user);
+                        break;
+                    case 6:
+                        userView.update(user.getId());
+                        break;
+                    case 7:
+                        orderView.deleteById(user);
+                        break;
+                    case 0:
+                        break;
+                    default:
+                        System.out.println("Seleccione una opción válida.");
+                }
+            } catch (IllegalArgumentException | IllegalStateException e) {
+                System.out.println(e.getMessage());
             }
         } while (option != 0);
     }
