@@ -17,7 +17,10 @@ public class ItemServiceAdapter implements ItemServiceInterface {
 
     @Override
     public Item createItem(Integer cartId, Products product, Integer quantity) {
-        return null;
+        validateId(cartId, "carrito");
+        Item item = new Item(product, quantity);
+        item.setCartId(cartId);
+        return itemRepositoryPort.save(item);
     }
 
     @Override
@@ -38,5 +41,12 @@ public class ItemServiceAdapter implements ItemServiceInterface {
     @Override
     public void deleteById(Integer itemId) {
 
+    }
+
+    //Metodo auxiliar para validar que el ID sea mayor a cero
+    private void validateId(Integer id, String name) {
+        if (id == null || id < 1) {
+            throw new IllegalArgumentException("El ID del " + name + " debe ser mayor que cero.");
+        }
     }
 }
