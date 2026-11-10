@@ -21,7 +21,7 @@ public class ShoppingCartServiceAdapter implements ShoppingCartServiceInterface{
 
     @Override
     public ShoppingCart createCart() {
-        return null;
+        return cartRepository.save(new ShoppingCart());
     }
 
     @Override
