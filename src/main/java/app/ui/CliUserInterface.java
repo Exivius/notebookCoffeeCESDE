@@ -235,14 +235,18 @@ public class CliUserInterface {
             option = DataTypeValidator.validateInt(
                     "\nÓRDENES\n1. Crear\n2. Consultar por ID\n3. Consultar todas\n" +
                     "4. Actualizar\n5. Eliminar\n0. Volver");
-            switch (option) {
-                case 1: orderView.createOrder(); break;
-                case 2: orderView.selectByOrderId(); break;
-                case 3: orderView.selectAllOrders(); break;
-                case 4: orderView.updateOrder(); break;
-                case 5: orderView.deleteById(); break;
-                case 0: break;
-                default: System.out.println("Seleccione una opción válida.");
+            try {
+                switch (option) {
+                    case 1: orderView.createOrder(); break;
+                    case 2: orderView.selectByOrderId(); break;
+                    case 3: orderView.selectAllOrders(); break;
+                    case 4: orderView.updateOrder(); break;
+                    case 5: orderView.deleteById(); break;
+                    case 0: break;
+                    default: System.out.println("Seleccione una opción válida.");
+                }
+            } catch (IllegalArgumentException | IllegalStateException e) {
+                System.out.println(e.getMessage());
             }
         } while (option != 0);
     }

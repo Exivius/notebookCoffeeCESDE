@@ -110,7 +110,15 @@ public class OrderRepositoryAdapterDB implements OrderRepositoryPort {
 
     @Override
     public void deleteById(Integer Id) {
-
+        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM `order` WHERE order_id = ?")) {
+            ps.setInt(1, Id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1451) {
+                throw new IllegalStateException("No se puede eliminar una orden con pagos asociados.", e);
+            }
+            throw databaseError("eliminar la orden", e);
+        }
     }
 
     //Metodos auxiliares
