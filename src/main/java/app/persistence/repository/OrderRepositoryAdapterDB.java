@@ -8,6 +8,7 @@ import app.persistence.mappers.RowMapper;
 import app.service.outputports.OrderRepositoryPort;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderRepositoryAdapterDB implements OrderRepositoryPort {
@@ -55,7 +56,34 @@ public class OrderRepositoryAdapterDB implements OrderRepositoryPort {
 
     @Override
     public List<Order> selectAllOrders() {
-        return List.of();
+        return selectOrders(null);
+    }
+
+    @Override
+    public List<Order> selectOrdersByUserId(Integer userId) {
+        if (userId == null || userId < 1) {
+            throw new IllegalArgumentException("El ID del usuario debe ser mayor que cero.");
+        }
+        return selectOrders(userId);
+    }
+
+    private List<Order> selectOrders(Integer userId) {
+        List<Order> orders = new ArrayList<>();
+        String sql = selectSql();
+        if (userId != null) {
+            sql += " WHERE o.user_id = ?";
+        }
+        sql += " ORDER BY o.order_id";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            if (userId != null) {
+                ps.setInt(1, userId);
+            }
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) orders.add(mapOrder(rs));
+            return orders;
+        } catch (SQLException e) {
+            throw databaseError("seleccionar todas las órdenes", e);
+        }
     }
 
     @Override

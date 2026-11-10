@@ -82,6 +82,18 @@ public class OrderServiceAdapter implements OrderServiceInterface {
     }
 
     @Override
+    public List<Order> selectOrdersByUserId(Integer userId) {
+        if (userId == null || userId < 1) {
+            throw new IllegalArgumentException("El ID del usuario debe ser mayor que cero.");
+        }
+        List<Order> orders = orderRepositoryPort.selectOrdersByUserId(userId);
+        for (Order order : orders) {
+            hydrate(order);
+        }
+        return orders;
+    }
+
+    @Override
     public void deleteById(Integer id) {
         // Solicita eliminar la orden con el ID indicado.
         Order order = orderRepositoryPort.selectByOrderId(id);

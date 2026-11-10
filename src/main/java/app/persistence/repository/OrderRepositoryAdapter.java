@@ -48,6 +48,17 @@ public class OrderRepositoryAdapter implements OrderRepositoryPort {
     }
 
     @Override
+    public List<Order> selectOrdersByUserId(Integer userId) {
+        List<Order> userOrders = new ArrayList<>();
+        for (Order order : orders) {
+            if (order.getUser() != null && Objects.equals(order.getUser().getId(), userId)) {
+                userOrders.add(order);
+            }
+        }
+        return userOrders;
+    }
+
+    @Override
     public Order updateOrder(Order order) {
         // i representa la posición; empieza en cero y avanza con i++.
         for (int i = 0; i < orders.size(); i++) {

@@ -109,15 +109,17 @@ public class OrderView {
     }
 
     public void selectOrdersByUser(User user) {
+        if (user == null || user.getId() == null) {
+            System.out.println("No se pudo identificar al usuario autenticado.");
+            return;
+        }
         boolean found = false;
-        for (Order order : orderService.selectAllOrders()) {
-            if (order.getUser() != null && order.getUser().getId().equals(user.getId())) {
-                System.out.println("Orden: " + order.getOrderId()
-                        + " | Sede: " + order.getPlace().getPlaceName()
-                        + " | Productos:");
-                printProducts(order);
-                found = true;
-            }
+        for (Order order : orderService.selectOrdersByUserId(user.getId())) {
+            System.out.println("Orden: " + order.getOrderId()
+                    + " | Sede: " + order.getPlace().getPlaceName()
+                    + " | Productos:");
+            printProducts(order);
+            found = true;
         }
         if (!found) {
             System.out.println("No hay órdenes registradas para este usuario.");

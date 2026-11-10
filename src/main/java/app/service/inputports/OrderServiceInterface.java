@@ -19,6 +19,7 @@ public interface OrderServiceInterface {
 
     // Consulta todas las órdenes guardadas.
     List<Order> selectAllOrders();
+    List<Order> selectOrdersByUserId(Integer userId);
 
     // Actualiza la sede, el usuario y el producto de una orden existente.
     Order updateOrder(Integer orderId, Place place, User user, Products products);
