@@ -26,7 +26,9 @@ public class ShoppingCartServiceAdapter implements ShoppingCartServiceInterface{
 
     @Override
     public ShoppingCart selectById(Integer cartId) {
-        return null;
+        validateId(cartId);
+        ShoppingCart cart = cartRepository.selectById(cartId);
+        return hydrate(cart);
     }
 
     @Override
@@ -52,5 +54,28 @@ public class ShoppingCartServiceAdapter implements ShoppingCartServiceInterface{
     @Override
     public void removeItem(Integer cartId, Integer itemId) {
 
+    }
+
+    private void validateCart(ShoppingCart cart) {
+        if (cart == null || cart.getCartId() == null) {
+            throw new IllegalArgumentException("Debe indicar un carrito con ID.");
+        }
+    }
+
+    //Verifica que el carrito no sea nulo, limpia el carrito y devuelve el carrito actualizado
+    private ShoppingCart hydrate(ShoppingCart cart) {
+        if (cart == null) {
+            cart.clearCart();
+            for (Item item : itemService.selectByCartId(cart.getCartId())) {
+                cart.addItem(item);
+            }
+        }
+        return cart;
+    }
+
+    private void validateId(Integer id) {
+        if (id == null || id < 1) {
+            throw new IllegalArgumentException("El ID del carrito debe ser mayor que cero.");
+        }
     }
 }

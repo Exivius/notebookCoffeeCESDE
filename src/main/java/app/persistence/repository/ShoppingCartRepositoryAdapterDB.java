@@ -36,7 +36,16 @@ public class ShoppingCartRepositoryAdapterDB implements ShoppingCartRepositoryPo
 
     @Override
     public ShoppingCart selectById(Integer cartId) {
-        return null;
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT cart_id, total FROM shopping_cart WHERE cart_id = ?")) {
+            ps.setInt(1, cartId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) return null;
+                return new ShoppingCart(rs.getInt("cart_id"), rs.getFloat("total"));
+            }
+        } catch (SQLException e) {
+            throw databaseError("consultar el carrito", e);
+        }
     }
 
     @Override
