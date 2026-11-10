@@ -42,7 +42,20 @@ public class ShoppingCartServiceAdapter implements ShoppingCartServiceInterface{
 
     @Override
     public ShoppingCart updateCart(ShoppingCart cart) {
-        return null;
+        validateCart(cart);
+        cart.calculateTotal();
+        ShoppingCart updated = cartRepository.update(cart);
+        if (updated == null) {
+            return null;
+        }
+        for (Item current : itemService.selectByCartId(cart.getCartId())) {
+            itemService.deleteById(current.getItemId());
+        }
+        for (Item item : cart.getItems()) {
+            item.setCartId(cart.getCartId());
+            itemService.createItem(cart.getCartId(), item.getProduct(), item.getQuantity());
+        }
+        return hydrate(updated);
     }
 
     @Override

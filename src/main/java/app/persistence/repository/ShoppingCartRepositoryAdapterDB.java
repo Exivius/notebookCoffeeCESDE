@@ -64,7 +64,18 @@ public class ShoppingCartRepositoryAdapterDB implements ShoppingCartRepositoryPo
 
     @Override
     public ShoppingCart update(ShoppingCart cart) {
-        return null;
+        try (PreparedStatement ps = connection.prepareStatement(
+                "UPDATE shopping_cart SET total = ? WHERE cart_id = ?")) {
+            ps.setFloat(1, cart.calculateTotal());
+            ps.setInt(2, cart.getCartId());
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new IllegalStateException("No se encontró el carrito con ID: " + cart.getCartId());
+            }
+            return cart;
+        } catch (SQLException e) {
+            throw databaseError("actualizar el carrito", e);
+        }
     }
 
     @Override
