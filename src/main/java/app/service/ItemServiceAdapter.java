@@ -25,7 +25,8 @@ public class ItemServiceAdapter implements ItemServiceInterface {
 
     @Override
     public Item selectById(Integer itemId) {
-        return null;
+        validateId(itemId, "item");
+        return itemRepositoryPort.selectById(itemId);
     }
 
     @Override

@@ -17,6 +17,12 @@ public class ItemRepositoryAdapterDB implements ItemRepositoryPort {
         this.rowMapper = rowMapper;
     }
 
+    private String selectSql() {
+        return "SELECT ci.item_id, ci.cart_id, ci.product_id, ci.quantity, ci.price_by_quantity, "
+                + "pr.product_name, pr.product_type FROM cart_item ci "
+                + "JOIN products pr ON ci.product_id = pr.product_id";
+    }
+
     @Override
     public Item save(Item item) {
         String sql = "INSERT INTO cart_item (cart_id, product_id, quantity, price_by_quantity, total) VALUES (?, ?, ?, ?, ?)";
@@ -35,7 +41,15 @@ public class ItemRepositoryAdapterDB implements ItemRepositoryPort {
 
     @Override
     public Item selectById(Integer itemId) {
-        return null;
+        try (PreparedStatement ps = connection.prepareStatement(selectSql() + " WHERE ci.item_id = ?")) {
+            ps.setInt(1, itemId);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? rowMapper.mapRow(rs) : null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al consultar el item", e);
+
+        }
     }
 
     @Override
