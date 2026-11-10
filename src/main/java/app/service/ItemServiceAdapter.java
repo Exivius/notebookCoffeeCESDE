@@ -37,7 +37,10 @@ public class ItemServiceAdapter implements ItemServiceInterface {
 
     @Override
     public Item updateItem(Item item) {
-        return null;
+        if(item == null || item.getItemId() == null) {
+            throw new IllegalArgumentException("Debe indicar un item con ID.");
+        }
+        return itemRepositoryPort.update(item);
     }
 
     @Override

@@ -36,7 +36,7 @@ public class ItemRepositoryAdapterDB implements ItemRepositoryPort {
             }
             return item;
         } catch (SQLException e) {
-            throw new RuntimeException("Error al crear el item", e);
+            throw databaseError("crear el item", e);
         }
     }
 
@@ -48,7 +48,7 @@ public class ItemRepositoryAdapterDB implements ItemRepositoryPort {
                 return rs.next() ? rowMapper.mapRow(rs) : null;
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error al consultar el item", e);
+            throw databaseError("consultar el item", e);
 
         }
     }
@@ -64,13 +64,26 @@ public class ItemRepositoryAdapterDB implements ItemRepositoryPort {
             }
             return items;
         } catch (SQLException e){
-            throw new RuntimeException("Error al consultar el item", e);
+            throw databaseError("listar los items", e);
         }
     }
 
     @Override
     public Item update(Item item) {
-        return null;
+        String sql = "UPDATE cart_item SET quantity = ?, price_by_quantity = ?, total = ? WHERE item_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, item.getQuantity());
+            ps.setDouble(2, item.getPriceByQuantity());
+            ps.setDouble(3, item.getTotal());
+            ps.setInt(4, item.getItemId());
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new RuntimeException("No se encontró el item con ID: " + item.getItemId());
+            }
+            return item;
+        } catch (SQLException e) {
+            throw databaseError("actualizar el item", e);
+        }
     }
 
     @Override
@@ -84,5 +97,9 @@ public class ItemRepositoryAdapterDB implements ItemRepositoryPort {
         ps.setInt(3, item.getQuantity());
         ps.setDouble(4, item.getPriceByQuantity());
         ps.setDouble(5, item.getTotal());
+    }
+
+    private IllegalStateException databaseError(String action, SQLException e) {
+        return new IllegalStateException("No se pudo " + action + " en MySQL.", e);
     }
 }
