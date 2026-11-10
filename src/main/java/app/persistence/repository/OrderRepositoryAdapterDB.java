@@ -43,7 +43,14 @@ public class OrderRepositoryAdapterDB implements OrderRepositoryPort {
 
     @Override
     public Order selectByOrderId(Integer orderId) {
-        return null;
+        try (PreparedStatement ps = connection.prepareStatement(selectSql() + " WHERE o.order_id = ?")) {
+            ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? mapOrder(rs) : null;
+            }
+        } catch (SQLException e) {
+            throw databaseError("seleccionar la orden", e);
+        }
     }
 
     @Override
