@@ -33,7 +33,11 @@ public class ShoppingCartServiceAdapter implements ShoppingCartServiceInterface{
 
     @Override
     public List<ShoppingCart> selectAll() {
-        return List.of();
+        List<ShoppingCart> carts = cartRepository.selectAll();
+        for (ShoppingCart cart : carts) {
+            hydrate(cart);
+        }
+        return carts;
     }
 
     @Override

@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShoppingCartRepositoryAdapterDB implements ShoppingCartRepositoryPort {
@@ -50,7 +51,15 @@ public class ShoppingCartRepositoryAdapterDB implements ShoppingCartRepositoryPo
 
     @Override
     public List<ShoppingCart> selectAll() {
-        return List.of();
+        List<ShoppingCart> carts = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT cart_id, total FROM shopping_cart ORDER BY cart_id");
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) carts.add(new ShoppingCart(rs.getInt("cart_id"), rs.getFloat("total")));
+            return carts;
+        } catch (SQLException e) {
+            throw databaseError("listar los carritos", e);
+        }
     }
 
     @Override
