@@ -60,7 +60,8 @@ public class ShoppingCartServiceAdapter implements ShoppingCartServiceInterface{
 
     @Override
     public void deleteById(Integer cartId) {
-
+        validateId(cartId);
+        cartRepository.deleteById(cartId);
     }
 
     @Override

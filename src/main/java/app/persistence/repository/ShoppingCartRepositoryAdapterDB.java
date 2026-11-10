@@ -80,7 +80,16 @@ public class ShoppingCartRepositoryAdapterDB implements ShoppingCartRepositoryPo
 
     @Override
     public void deleteById(Integer cartId) {
-
+        try (PreparedStatement ps = connection.prepareStatement(
+                "DELETE FROM shopping_cart WHERE cart_id = ?")) {
+            ps.setInt(1, cartId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1451) {
+                throw new IllegalStateException("No se puede eliminar un carrito asociado a una orden.", e);
+            }
+            throw databaseError("eliminar el carrito", e);
+        }
     }
 
     private IllegalStateException databaseError(String action, SQLException e) {
