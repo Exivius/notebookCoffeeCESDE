@@ -5,20 +5,13 @@ import app.domain.Products;
 import app.persistence.dbConnection.DataBaseConnection;
 import app.persistence.mappers.*;
 import app.persistence.repository.*;
-import app.service.AdminServiceInterfaceAdapter;
-import app.service.PaymentServiceAdapter;
+import app.persistence.repository.PaymentMethodRepository;
+import app.service.*;
 import app.service.inputports.*;
-import app.service.outputports.AdminRepositoryPort;
+import app.service.inputports.PaymentMethodService;
+import app.service.outputports.*;
 import app.ui.CliUserInterface;
 import app.view.*;
-import app.service.PlaceServiceAdapter;
-import app.service.outputports.PlaceRepositoryPort;
-import app.service.ProductServiceAdapter;
-import app.service.outputports.ProductRepositoryPort;
-import app.service.OrderServiceAdapter;
-import app.service.outputports.OrderRepositoryPort;
-import app.service.UserServiceAdapter;
-import app.service.outputports.UserRepositoryPort;
 
 import java.sql.Connection;
 
@@ -47,9 +40,14 @@ public class Config {
         ProductServiceInterface productService = new ProductServiceAdapter(productRepositoryPort);
         ProductView productView = new ProductView(productService);
 
+        ItemRepositoryPort itemRepository = new ItemRepositoryAdapterDB(connection, new ItemMapper());
+        ItemServiceInterface itemService = new ItemServiceAdapter(itemRepository);
+        ShoppingCartRepositoryPort cartRepository = new ShoppingCartRepositoryAdapterDB(connection);
+        ShoppingCartServiceInterface cartService = new ShoppingCartServiceAdapter(cartRepository, itemService);
+
         // Conecta el repositorio de órdenes con su servicio y su vista.
-        OrderRepositoryPort orderRepositoryPort = new OrderRepositoryAdapter();
-        OrderServiceInterface orderService = new OrderServiceAdapter(orderRepositoryPort);
+        OrderRepositoryPort orderRepositoryPort = new OrderRepositoryAdapterDB(connection, new OrderMapper());
+        OrderServiceInterface orderService = new OrderServiceAdapter(orderRepositoryPort, cartService);
         PaymentMethodRepository methodRepository = new app.persistence.repository.PaymentMethodRepository(connection, new PaymentMethodMapper());
         PaymentMethodService methodService = new app.service.PaymentMethodService(methodRepository);
         PaymentMethodView methodView = new app.view.PaymentMethodView(methodService);

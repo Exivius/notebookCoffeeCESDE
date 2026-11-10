@@ -5,18 +5,17 @@ import app.domain.ShoppingCart;
 import app.service.inputports.ItemServiceInterface;
 import app.service.inputports.ShoppingCartServiceInterface;
 import app.service.outputports.ShoppingCartRepositoryPort;
-
-import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
-public class ShoppingCartServiceAdapter implements ShoppingCartServiceInterface{
-
+public class ShoppingCartServiceAdapter implements ShoppingCartServiceInterface {
     private final ShoppingCartRepositoryPort cartRepository;
     private final ItemServiceInterface itemService;
 
-    public ShoppingCartServiceAdapter(ShoppingCartRepositoryPort cartRepositoryPort, ItemServiceInterface itemService) {
-        this.cartRepository = cartRepositoryPort;
-        this.itemService = itemService;
+    public ShoppingCartServiceAdapter(ShoppingCartRepositoryPort cartRepository,
+                                      ItemServiceInterface itemService) {
+        this.cartRepository = Objects.requireNonNull(cartRepository);
+        this.itemService = Objects.requireNonNull(itemService);
     }
 
     @Override
@@ -68,7 +67,7 @@ public class ShoppingCartServiceAdapter implements ShoppingCartServiceInterface{
     public Item addItem(Integer cartId, Item item) {
         validateId(cartId);
         if (item == null) {
-            throw  new IllegalArgumentException("item no puede ser nulo");
+            throw new IllegalArgumentException("El item no puede ser nulo.");
         }
         item.setCartId(cartId);
         Item saved = itemService.createItem(cartId, item.getProduct(), item.getQuantity());
@@ -85,21 +84,20 @@ public class ShoppingCartServiceAdapter implements ShoppingCartServiceInterface{
         cartRepository.update(cart);
     }
 
-    private void validateCart(ShoppingCart cart) {
-        if (cart == null || cart.getCartId() == null) {
-            throw new IllegalArgumentException("Debe indicar un carrito con ID.");
-        }
-    }
-
-    //Verifica que el carrito no sea nulo, limpia el carrito y devuelve el carrito actualizado
     private ShoppingCart hydrate(ShoppingCart cart) {
-        if (cart == null) {
+        if (cart != null) {
             cart.clearCart();
             for (Item item : itemService.selectByCartId(cart.getCartId())) {
                 cart.addItem(item);
             }
         }
         return cart;
+    }
+
+    private void validateCart(ShoppingCart cart) {
+        if (cart == null || cart.getCartId() == null) {
+            throw new IllegalArgumentException("Debe indicar un carrito con ID.");
+        }
     }
 
     private void validateId(Integer id) {

@@ -21,7 +21,24 @@ public class OrderRepositoryAdapterDB implements OrderRepositoryPort {
 
     @Override
     public Order save(Order order) {
-        return null;
+        requireOrder(order);
+        if (order.getShoppingCart().getCartId() == null) {
+            throw new IllegalArgumentException("La orden debe tener un carrito guardado.");
+        }
+        String sql = "INSERT INTO `order` (place_id, user_id, cart_id) VALUES (?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            setId(ps, 1, order.getPlace() == null ? null : order.getPlace().getPlaceId());
+            setId(ps, 2, order.getUser() == null ? null : order.getUser().getId());
+            ps.setInt(3, order.getShoppingCart().getCartId());
+            ps.executeUpdate();
+            try (ResultSet keys = ps.getGeneratedKeys()) {
+                if (!keys.next()) throw new IllegalStateException("No se obtuvo el ID de la orden.");
+                order.setOrderId(keys.getInt(1));
+            }
+            return order;
+        } catch (SQLException e) {
+            throw databaseError("crear la orden", e);
+        }
     }
 
     @Override
