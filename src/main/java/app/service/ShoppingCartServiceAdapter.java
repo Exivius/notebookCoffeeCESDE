@@ -79,7 +79,10 @@ public class ShoppingCartServiceAdapter implements ShoppingCartServiceInterface{
 
     @Override
     public void removeItem(Integer cartId, Integer itemId) {
-
+        validateId(cartId);
+        itemService.deleteById(itemId);
+        ShoppingCart cart = selectById(cartId);
+        cartRepository.update(cart);
     }
 
     private void validateCart(ShoppingCart cart) {
