@@ -66,7 +66,15 @@ public class ShoppingCartServiceAdapter implements ShoppingCartServiceInterface{
 
     @Override
     public Item addItem(Integer cartId, Item item) {
-        return null;
+        validateId(cartId);
+        if (item == null) {
+            throw  new IllegalArgumentException("item no puede ser nulo");
+        }
+        item.setCartId(cartId);
+        Item saved = itemService.createItem(cartId, item.getProduct(), item.getQuantity());
+        ShoppingCart cart = selectById(cartId);
+        cartRepository.update(cart);
+        return saved;
     }
 
     @Override
