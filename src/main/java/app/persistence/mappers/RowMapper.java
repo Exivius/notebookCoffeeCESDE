@@ -1,4 +1,4 @@
-package app.repository.mappers;
+package app.persistence.mappers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

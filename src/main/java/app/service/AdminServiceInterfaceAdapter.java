@@ -1,0 +1,43 @@
+package app.service;
+
+import app.domain.Admin;
+import app.service.inputports.AdminServiceInterface;
+import app.service.outputports.AdminRepositoryPort;
+
+import java.util.List;
+import java.util.Optional;
+
+public class AdminServiceInterfaceAdapter implements AdminServiceInterface {
+
+    private final AdminRepositoryPort adminRepositoryPort;
+
+    public AdminServiceInterfaceAdapter(AdminRepositoryPort adminRepositoryPort) {
+        this.adminRepositoryPort = adminRepositoryPort;
+    }
+
+    @Override
+    public Admin create(String name, String lastName, String email, String phone, String password, String state, String area) {
+        Admin admin = new Admin(null, name, lastName, email, phone, password, state, "ADMIN", area);
+        return adminRepositoryPort.save(admin);
+    }
+
+    @Override
+    public Admin update(Admin admin) {
+        return adminRepositoryPort.update(admin);
+    }
+
+    @Override
+    public List<Admin> selectAdmins() {
+        return adminRepositoryPort.selectAll();
+    }
+
+    @Override
+    public Optional<Admin> selectAdminById(int id) {
+        return adminRepositoryPort.selectById(id);
+    }
+
+    @Override
+    public void deleteAdmin(int id) {
+        adminRepositoryPort.deleteById(id);
+    }
+}

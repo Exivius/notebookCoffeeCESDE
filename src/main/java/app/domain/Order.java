@@ -1,6 +1,5 @@
 package app.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
@@ -45,32 +44,13 @@ public class Order {
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
 
-    public Products getProducts() {
-        return shoppingCart.getItems().isEmpty() ? null : shoppingCart.getItems().get(0).getProduct();
-    }
-
-    public void setProducts(Products product) {
-        shoppingCart.clearCart();
-        if (product != null) {
-            shoppingCart.addItem(new Item(product, 1));
-        }
-    }
-
     public ShoppingCart getShoppingCart() { return shoppingCart; }
-
-    public List<Products> getProductList() {
-        List<Products> products = new ArrayList<>();
-        for (Item item : shoppingCart.getItems()) {
-            products.add(item.getProduct());
-        }
-        return products;
+    public void setShoppingCart(ShoppingCart shoppingCart) {
+        this.shoppingCart = shoppingCart == null ? new ShoppingCart() : shoppingCart;
     }
 
+    // Compatibilidad con el contrato usado por los recibos existentes.
     public List<Integer> getQuantities() {
-        List<Integer> quantities = new ArrayList<>();
-        for (Item item : shoppingCart.getItems()) {
-            quantities.add(item.getQuantity());
-        }
-        return quantities;
+        return shoppingCart.getItems().stream().map(Item::getQuantity).toList();
     }
 }

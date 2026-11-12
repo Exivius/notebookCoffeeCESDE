@@ -14,6 +14,7 @@ import app.service.helpers.SetSede;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class OrderView {
 
@@ -47,8 +48,8 @@ public class OrderView {
         int productId = DataTypeValidator.validateInt("Ingrese el nuevo ID de producto:");
         Place place = placeService.selectPlaceById(placeId);
         User user = userService.selectUserById(userId);
-        Products product = productService.selectById(productId);
-        updateOrder(place, user, product);
+        Optional<Products> product = productService.selectById(productId);
+        updateOrder(place, user, product.orElse(null));
     }
 
     public void createOrder(Place place, User user, Products products) {
@@ -83,7 +84,7 @@ public class OrderView {
                         + " | " + product.getProductPrice() + " | " + product.getProductType());
             }
             int productId = DataTypeValidator.validateInt("Ingrese el ID del producto:");
-            Products product = productService.selectById(productId);
+            Optional<Products> product = productService.selectById(productId);
             if (product == null) {
                 System.out.println("No existe ese producto.");
                 addMore = 1;
@@ -95,7 +96,7 @@ public class OrderView {
                 addMore = 1;
                 continue;
             }
-            products.add(product);
+            products.add(product.get());
             quantities.add(quantity);
             addMore = DataTypeValidator.validateInt("¿Desea agregar otro producto? 1. Sí 0. No");
         } while (addMore == 1);
@@ -108,15 +109,17 @@ public class OrderView {
     }
 
     public void selectOrdersByUser(User user) {
+        if (user == null || user.getId() == null) {
+            System.out.println("No se pudo identificar al usuario autenticado.");
+            return;
+        }
         boolean found = false;
-        for (Order order : orderService.selectAllOrders()) {
-            if (order.getUser() != null && order.getUser().getId().equals(user.getId())) {
-                System.out.println("Orden: " + order.getOrderId()
-                        + " | Sede: " + order.getPlace().getPlaceName()
-                        + " | Productos:");
-                printProducts(order);
-                found = true;
-            }
+        for (Order order : orderService.selectOrdersByUserId(user.getId())) {
+            System.out.println("Orden: " + order.getOrderId()
+                    + " | Sede: " + order.getPlace().getPlaceName()
+                    + " | Productos:");
+            printProducts(order);
+            found = true;
         }
         if (!found) {
             System.out.println("No hay órdenes registradas para este usuario.");
@@ -208,6 +211,22 @@ public class OrderView {
             return;
         }
 
+        orderService.deleteById(id);
+        System.out.println("Orden eliminada correctamente.");
+    }
+
+    public void deleteById(User user) {
+        if (user == null || user.getId() == null) {
+            System.out.println("No se pudo identificar al usuario autenticado.");
+            return;
+        }
+        int id = DataTypeValidator.validateInt("Ingrese el ID de la orden a eliminar:");
+        Order order = orderService.selectByOrderId(id);
+        if (order == null || order.getUser() == null
+                || !user.getId().equals(order.getUser().getId())) {
+            System.out.println("No existe una orden con ese ID para este usuario.");
+            return;
+        }
         orderService.deleteById(id);
         System.out.println("Orden eliminada correctamente.");
     }

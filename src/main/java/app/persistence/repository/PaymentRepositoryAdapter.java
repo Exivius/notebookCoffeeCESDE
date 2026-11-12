@@ -1,4 +1,4 @@
-package app.repository;
+package app.persistence.repository;
 
 import app.domain.Payment;
 import app.service.outputports.PaymentRepositoryPort;
@@ -41,6 +41,18 @@ public class PaymentRepositoryAdapter implements PaymentRepositoryPort {
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean existsByOrderId(int orderId) {
+        for (Payment payment : payments) {
+            if (payment.getOrder() != null
+                    && payment.getOrder().getOrderId() != null
+                    && payment.getOrder().getOrderId().equals(orderId)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

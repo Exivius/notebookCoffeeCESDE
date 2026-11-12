@@ -1,10 +1,11 @@
-package app.repository;
+package app.persistence.repository;
 
 import app.domain.Products;
 import app.service.outputports.ProductRepositoryPort;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class ProductRepositoryAdapter implements ProductRepositoryPort {
 
@@ -30,16 +31,16 @@ public class ProductRepositoryAdapter implements ProductRepositoryPort {
     }
 
     @Override
-    public Products selectById(Integer id) {
+    public Optional<Products> selectById(Integer id) {
         // Recorre los productos y busca el ID solicitado.
         for (Products product : products) {
             // Compara los valores de los IDs.
             if (Objects.equals(product.getProductId(), id)) {
-                return product;
+                return Optional.of(product);
             }
         }
         // null indica que no encontró el producto.
-        return null;
+        return Optional.empty();
     }
 
     @Override

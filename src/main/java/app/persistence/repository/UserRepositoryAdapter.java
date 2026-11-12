@@ -1,4 +1,4 @@
-package app.repository;
+package app.persistence.repository;
 
 import app.domain.User;
 import app.service.outputports.UserRepositoryPort;
@@ -13,6 +13,11 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
 
     @Override
     public User save(User user) {
+        if (user.getId() == null) {
+            int id = 1;
+            while (selectById(id) != null) id++;
+            user.setId(id);
+        }
         if (selectById(user.getId()) != null) {
             return null;
         }
@@ -32,13 +37,7 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
 
     @Override
     public List<User> selectAll() {
-        for(User user : users) {
-            System.out.println(user.getId() + " " +
-                    user.getName() + " " + user.getLastName() + " " + user.getEmail() + " " +
-                    user.getPhone() + " " + user.getPassword() + " " +
-                    " " + user.getCity());
-        }
-        return users;
+        return new ArrayList<>(users);
     }
 
     @Override
@@ -67,4 +66,15 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     public int countUsers() {
         return users.size();
     }
+    @Override
+    public User authenticate(String email, String password) {
+        for (User user : users) {
+            if (Objects.equals(email, user.getEmail()) && Objects.equals(password, user.getPassword())
+                    && "Activo".equals(user.getState())) {
+                return user;
+            }
+        }
+        return null;
+    }
+
 }

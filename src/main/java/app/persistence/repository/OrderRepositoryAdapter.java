@@ -1,4 +1,4 @@
-package app.repository;
+package app.persistence.repository;
 
 import app.domain.Order;
 import app.service.outputports.OrderRepositoryPort;
@@ -45,6 +45,17 @@ public class OrderRepositoryAdapter implements OrderRepositoryPort {
     public List<Order> selectAllOrders() {
         // Devuelve una copia de la lista con las órdenes guardadas.
         return new ArrayList<>(orders);
+    }
+
+    @Override
+    public List<Order> selectOrdersByUserId(Integer userId) {
+        List<Order> userOrders = new ArrayList<>();
+        for (Order order : orders) {
+            if (order.getUser() != null && Objects.equals(order.getUser().getId(), userId)) {
+                userOrders.add(order);
+            }
+        }
+        return userOrders;
     }
 
     @Override

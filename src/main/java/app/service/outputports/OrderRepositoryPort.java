@@ -7,6 +7,7 @@ public interface OrderRepositoryPort {
     Order save(Order order);
 
     Order selectByOrderId(Integer orderId);
+    List<Order> selectOrdersByUserId(Integer userId);
     List<Order> selectAllOrders();
     Order updateOrder(Order order);
     void deleteById(Integer Id);

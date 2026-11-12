@@ -2,6 +2,7 @@ package app.domain;
 
 public class Payment {
     private Integer paymentId;
+    private String paymentType;
     private PaymentMethod paymentMethod;
     private Order order;
     private String paymentDate;
@@ -17,6 +18,9 @@ public class Payment {
         this.paymentMethod = paymentMethod;
         this.order = order;
     }
+
+    public String getPaymentType() { return paymentType; }
+    public void setPaymentType(String paymentType) { this.paymentType = paymentType; }
 
     public Integer getPaymentId() {
         return paymentId;

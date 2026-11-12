@@ -1,6 +1,8 @@
 package app.domain;
 
 public class Item {
+    private Integer itemId;
+    private Integer cartId;
     private Integer productId;
     private Products product;
     private Integer quantity;
@@ -30,6 +32,11 @@ public class Item {
     public Integer getProductId() {
         return productId;
     }
+
+    public Integer getItemId() { return itemId; }
+    public void setItemId(Integer itemId) { this.itemId = itemId; }
+    public Integer getCartId() { return cartId; }
+    public void setCartId(Integer cartId) { this.cartId = cartId; }
 
     public Products getProduct() {
         return product;
